@@ -18,7 +18,7 @@ public class Voyage {
     private String ville;
     
     @Column(name="description", unique=false, nullable = false, length = 400)
-    private String prenom;
+    private String description;
     
     @Column(name="prix_unitaire", unique=false,nullable = false, length = 100)
     private int prix_unitaire;
@@ -39,12 +39,12 @@ public class Voyage {
 		this.ville = ville;
 	}
 
-	public String getPrenom() {
-		return prenom;
+	public String getDescription() {
+		return description;
 	}
 
-	public void setPrenom(String prenom) {
-		this.prenom = prenom;
+	public void setDescription(String description) {
+		this.description = description;
 	}
 
 	public int getPrix_unitaire() {
@@ -54,5 +54,7 @@ public class Voyage {
 	public void setPrix_unitaire(int prix_unitaire) {
 		this.prix_unitaire = prix_unitaire;
 	}
+
+
     
 }

@@ -1,4 +1,4 @@
-package projetJEE.ProjetEE;
+package projetJEE.ProjetEE.Models;
 
 import java.util.Objects;
 

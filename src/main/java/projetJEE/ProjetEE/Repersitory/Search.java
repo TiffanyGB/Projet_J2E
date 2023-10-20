@@ -1,4 +1,4 @@
-package projetJEE.ProjetEE;
+package projetJEE.ProjetEE.Repersitory;
 
 import java.io.IOException;
 

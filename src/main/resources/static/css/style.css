@@ -1,0 +1,25 @@
+/* Style du tableau */
+table {
+    border-collapse: collapse;
+    width: 80%;
+    margin: 20px auto;
+}
+
+/* Style de l'en-tête du tableau */
+th {
+    background-color: #007BFF;
+    color: #fff;
+    text-align: left;
+    padding: 8px;
+}
+
+/* Style des cellules du tableau */
+td {
+    border: 1px solid #ddd;
+    padding: 8px;
+}
+
+/* Style des lignes paires du tableau */
+tr:nth-child(even) {
+    background-color: #f2f2f2;
+}
