@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Voyages</title>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/style.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/css/header.css}">
+
+</head>
+	<div th:replace="header :: header"></div>
+	
+	<a th:href="@{/}">Retour à la page d'accueil</a>
+
+    <h1>Liste des Voyages</h1>
+    
+    <table>
+        <thead>
+            <tr>
+				<th>Image</th>
+				<th>Pays</th>
+                <th>Ville</th>
+                <th>Description</th>
+                <th>Prix unitaire</th>
+                <th>Catégorie</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr th:each="voyage : ${voyages}" class="voyage-row">
+				<td><img th:src="@{/img/} + ${voyage.imageVoyage}" alt="Image du voyage" style="max-width: 50%; max-height: 100px;"></td>
+				<td class="pays" th:text="${voyage.pays}"></td>
+		        <td class="ville" th:text="${voyage.ville}"></td>
+		        <td class="description" th:text="${voyage.description}"></td>
+		        <td class="prix" th:text="${voyage.prix_unitaire}"></td>
+		        <td class="categorie" th:text="${voyage.idCategorie.nomCategorie}"></td> 
+
+    			 <td>
+	                <form th:action="@{/reservation}" method="post">
+	                    <input type="hidden" name="voyageId" th:value="${voyage.voyageId}" />
+	                    <button type="submit">Réserver</button>
+	                </form>
+            	</td>
+			</tr>
+
+        </tbody>
+    </table>
+    
+    </br>
+    </br>
+	
+	</body>
+</html>

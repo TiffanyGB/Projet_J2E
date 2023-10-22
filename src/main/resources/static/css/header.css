@@ -1,0 +1,46 @@
+/* src/main/resources/static/css/header.css */
+header {
+    background-color: rgb(255, 255, 255);
+    padding: 10px;
+}
+
+nav{
+	float: left;
+	background-color: rgb(255, 255, 255);
+	width: 85%;
+	padding: 1.5%;
+	font-size: 110%;
+	text-align: center;
+}
+
+/* Style de la barre de navigation */
+nav ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    background-color: rgb(255, 255, 255);
+}
+
+nav ul li {
+    display: inline;
+    margin-right: 6%;
+}
+
+nav ul li a {
+    text-decoration: none;
+    color: #000;
+}
+
+nav ul li a:hover {
+    text-decoration: underline;
+}
+
+nav ul li a:visited {
+    color: #000;
+}
+
+#logo {
+    width: 10%;
+    float: left;
+}
+

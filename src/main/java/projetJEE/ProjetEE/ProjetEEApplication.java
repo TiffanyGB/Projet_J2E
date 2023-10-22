@@ -12,16 +12,5 @@ public class ProjetEEApplication {
 	public static void main(String[] args) {
 		SpringApplication.run(ProjetEEApplication.class, args);
 	}
-//	
-//    @Bean
-//    public WebMvcConfigurer webMvcConfigurer() {
-//        return new WebMvcConfigurer() {
-//            @Override
-//            public void addResourceHandlers(ResourceHandlerRegistry registry) {
-//                registry.addResourceHandler("/**")
-//                        .addResourceLocations("classpath:/static/css/");
-//            }
-//        };
-//    }
 
 }

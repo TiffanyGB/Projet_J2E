@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Voyages</title>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/style.css}">
+     <link rel="stylesheet" type="text/css" th:href="@{/css/header.css}">
+</head>
+<body>
+	<div th:replace="header :: header"></div>
+	<a th:href="@{/}">Retour à la page d'accueil</a>
+
+    <h1>Liste des catégories</h1>
+
+    <table>
+        <thead>
+            <tr>
+				<th>Image</th>
+				<th>Nom</th>
+				<th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr th:each="categorie : ${categories}" class="categorie-row">
+				<td class="imageVoyage" th:text="${categorie.imageCategorie}"></td>
+				<td class="nomCategorie" th:text="${categorie.nomCategorie}"></td>
+    			 <td>
+	                <form th:action="@{/supprimer-categorie}" method="post">
+	                    <input type="hidden" name="idCategorie" th:value="${categorie.idCategorie}" />
+	                    <button type="submit">Supprimer</button>
+	                </form>
+	            	<form th:action="@{/modifier-categorie-redirection}" method="post">
+	                    <input type="hidden" name="idCategorie" th:value="${categorie.idCategorie}" />
+	                    <button type="submit">Modifier</button>
+	                </form>
+            	</td>
+			</tr>
+
+        </tbody>
+    </table>
+    
+	<form th:action="@{/ajouter-categorie}" method="post">
+	    <label for="nomCategorie">Nom de la catégorie :</label>
+	    <input type="text" id="nomCategorie" name="nomCategorie" required><br>
+	    
+	    <label for="imageCategorie">Image de la catégorie :</label>
+	    <input type="text" id="imageCategorie" name="imageCategorie" required><br>
+	    
+	    <button type="submit">Ajouter</button>
+	</form>
+	
+	</body>
+</html>
