@@ -22,7 +22,7 @@
         </thead>
         <tbody>
             <tr th:each="categorie : ${categories}" class="categorie-row">
-				<td class="imageVoyage" th:text="${categorie.imageCategorie}"></td>
+				<td><img th:src="@{/img/} + ${categorie.imageCategorie}" alt="Image du voyage" style="max-width: 50%; max-height: 100px;"></td>
 				<td class="nomCategorie" th:text="${categorie.nomCategorie}"></td>
     			 <td>
 	                <form th:action="@{/supprimer-categorie}" method="post">

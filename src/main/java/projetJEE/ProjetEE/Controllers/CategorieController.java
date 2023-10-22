@@ -32,11 +32,7 @@ public class CategorieController {
 		((Model) model).addAttribute("categories", categorieRepository.findAll());
 		return "admin/liste_catégories_admin";
 	}
-    
-    @GetMapping("/a")
-    public String a(Model model) {
-		return "a";
-	}
+
     
     @PostMapping("/ajouter-categorie")
     public String ajouterCategorie(@ModelAttribute Categorie categorie) {
