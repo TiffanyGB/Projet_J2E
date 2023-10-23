@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Voyages</title>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/style.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/css/header.css}">
+</head>
+<body>
+	<div th:replace="header :: header"></div>
+	
+	<div>
+		<form th:action="@{/resultats-recherche}" method="post">
+	    	<input type="text" id="recherche" name="recherche" required><br>
+		    <button type="submit">Chercher</button>
+		</form>
+	</div>
+
+	</body>
+</html>

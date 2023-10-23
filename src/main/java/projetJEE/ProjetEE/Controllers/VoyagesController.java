@@ -1,7 +1,12 @@
 package projetJEE.ProjetEE.Controllers;
 
 import java.sql.Date;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.Set;
 
+import org.hibernate.mapping.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -121,5 +126,22 @@ public class VoyagesController {
         System.out.println(model);
     	return "client/confirmation_reservation";
 	}
+    
+    @GetMapping("/recherche")
+    public String rechercherVoyagesPage() {
+    	return "client/rechercheVoyages";
+    }
+    
+    @PostMapping("/resultats-recherche")
+    public String resultatsRecherche(@RequestParam("recherche") String recherche, Model model) {
+    	Iterable<Voyage> voyagesPays = voyageRepository.findByPaysContainingIgnoreCase(recherche);
+    	Iterable<Voyage> voyagesVilles = voyageRepository.findByVilleContainingIgnoreCase(recherche);
+        Set<Voyage> resultatsRecherche = new HashSet<>();
+        voyagesPays.forEach(resultatsRecherche::add);
+        voyagesVilles.forEach(resultatsRecherche::add);
+        model.addAttribute("resultats",resultatsRecherche);
+
+    	return "client/rechercheResultats";
+    }
 
 }

@@ -13,5 +13,8 @@ public interface VoyageRepository extends CrudRepository<Voyage, Long> {
 	
     Iterable<Voyage> findAll();
     List<Voyage> findByIdCategorie(Categorie categorie);
+    Iterable<Voyage> findByVilleContainingIgnoreCase(String ville);
+    Iterable<Voyage> findByPaysContainingIgnoreCase(String pays);
+
 
 }
