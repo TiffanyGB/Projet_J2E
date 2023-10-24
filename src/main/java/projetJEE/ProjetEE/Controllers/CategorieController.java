@@ -1,5 +1,8 @@
 package projetJEE.ProjetEE.Controllers;
 
+import java.io.File;
+import java.io.IOException;
+import java.security.SecureRandom;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,6 +13,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
 
 import projetJEE.ProjetEE.Models.Categorie;
 import projetJEE.ProjetEE.Models.Voyage;
@@ -35,8 +39,30 @@ public class CategorieController {
 
     
     @PostMapping("/ajouter-categorie")
-    public String ajouterCategorie(@ModelAttribute Categorie categorie) {
+    public String ajouterCategorie(@ModelAttribute Categorie categorie,
+    		@RequestParam("nomCategorie") String nomCategorie, 
+    		@RequestParam("file") MultipartFile file) {
+    	
+
+        if (!file.isEmpty()) {
+            try {
+                String fileName = file.getOriginalFilename();
+//            	String fileName = generateRandomString(7);
+            	System.out.println(fileName);
+
+                String uploadDir = "/home/cytech/Cours/Ing2/S1/J2E/ProjetEE/src/main/resources/static/img/";
+                File dest = new File(uploadDir + fileName);
+
+                file.transferTo(dest);
+                categorie.setImageCategorie(fileName);
+
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        System.out.print(categorie);
     	categorieRepository.save(categorie); 
+
     	return "redirect:/listeCategories";
 	}
     
@@ -63,6 +89,55 @@ public class CategorieController {
         model.addAttribute("categorie", categorie);
     
         return "client/infos_categorie";
+    }
+    
+    @GetMapping("/")
+    public String accueil(Model model) {
+		((Model) model).addAttribute("categories", categorieRepository.findAll());
+		return "index";
+	}
+    
+
+    
+    @Controller
+    public class UploadController {
+
+        @PostMapping("/upload")
+        public String handleFileUpload(@RequestParam("file") MultipartFile file) {
+            if (!file.isEmpty()) {
+                try {
+                    // Récupérez le nom du fichier
+                    String fileName = file.getOriginalFilename();
+
+                    String uploadDir = "/home/cytech/Cours/Ing2/S1/J2E/ProjetEE/src/main/resources/static/img/";
+
+                    // Créez le fichier de destination
+                    File dest = new File(uploadDir + fileName);
+
+                    // Copiez le fichier téléchargé dans le dossier de destination
+                    file.transferTo(dest);
+
+                    // Faites ce que vous souhaitez avec le fichier, par exemple, sauvegardez le chemin dans la base de données
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+            return "redirect:/";
+        }
+    }
+    
+    
+    private static final String CHARACTERS = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+    private static SecureRandom random = new SecureRandom();
+
+    public static String generateRandomString(int length) {
+        StringBuilder sb = new StringBuilder(length);
+        for (int i = 0; i < length; i++) {
+            int randomIndex = random.nextInt(CHARACTERS.length());
+            char randomChar = CHARACTERS.charAt(randomIndex);
+            sb.append(randomChar);
+        }
+        return sb.toString();
     }
 
 }

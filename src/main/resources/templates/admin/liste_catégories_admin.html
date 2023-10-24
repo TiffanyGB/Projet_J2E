@@ -11,7 +11,7 @@
 	<a th:href="@{/}">Retour à la page d'accueil</a>
 
     <h1>Liste des catégories</h1>
-    <p>Nombre de catégories: <span th:text="${categories.size}"><
+    <p>Nombre de catégories: <span th:text="${categories.size}"></p>
 
     <table>
         <thead>
@@ -40,13 +40,14 @@
         </tbody>
     </table>
     
-	<form th:action="@{/ajouter-categorie}" method="post">
+	<form th:action="@{/ajouter-categorie}" method="post" enctype="multipart/form-data">
 	    <label for="nomCategorie">Nom de la catégorie :</label>
 	    <input type="text" id="nomCategorie" name="nomCategorie" required><br>
 	    
 	    <label for="imageCategorie">Image de la catégorie :</label>
-	    <input type="text" id="imageCategorie" name="imageCategorie" required><br>
-	    
+	    <input type="file" name="file" id="file" class="form-control-file">
+
+	        
 	    <button type="submit">Ajouter</button>
 	</form>
 	
