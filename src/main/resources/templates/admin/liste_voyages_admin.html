@@ -9,7 +9,7 @@
 </head>
 <body>
 	<div th:replace="header :: header"></div>
-	<a th:href="@{/}">Retour à la page d'accueil</a>
+	<button class="retour"><a th:href="@{/}">Retour à la page d'accueil</a></button>
     <h1>Liste des Voyages</h1>
     <p>Nombre de catégories: <span th:text="${voyages.size}"></p>
 

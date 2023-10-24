@@ -8,13 +8,13 @@
 </head>
 <body>
 	<div th:replace="header :: header"></div>
-	<a th:href="@{/}">Retour à la page d'accueil</a>
+	<button class="retour"><a th:href="@{/}">Retour à la page d'accueil</a></button>
 
     <h1>Liste des catégories</h1>
     <p>Nombre de catégories: <span th:text="${categories.size}"></p>
 
 
-    <table>
+<!--    <table>
         <thead>
             <tr>
 				<th>Image</th>
@@ -35,7 +35,18 @@
 			</tr>
 
         </tbody>
-    </table>
+    </table>-->
+    
+    <div class="grid-container">
+        <div class="grid-item" th:each="categorie : ${categories}">
+            <img th:src="@{/img/} + ${categorie.imageCategorie}" alt="Image du voyage" style="max-width: 100%; max-height: 100px;">
+            <p class="nomCategorie" th:text="${categorie.nomCategorie}"></p>
+            <form th:action="@{'/categorie-voyages/' + ${categorie.idCategorie}}" method="get">
+                <input type="hidden" name="idCategorie" th:value="${categorie.idCategorie}" />
+                <button type="submit" class="submit">Voir plus</button>
+            </form>
+        </div>
+    </div>
 	
 	</body>
 </html>

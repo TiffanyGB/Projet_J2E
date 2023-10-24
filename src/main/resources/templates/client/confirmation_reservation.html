@@ -10,7 +10,7 @@
 <body>
 	
 	<div th:replace="header :: header"></div>
-	<a th:href="@{/voyages-client}">Retour à la page d'accueil</a>
+	<button class="retour"><a th:href="@{/voyages-client}">Retour à la page d'accueil</a></button>
 
 
 	<h1>Confirmation de la réservation pour <span th:text="${voyage.ville}"></span></h1>

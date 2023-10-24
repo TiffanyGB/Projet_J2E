@@ -73,6 +73,22 @@ public class CategorieController {
         return "redirect:/listeCategories";
     }
     
+    @PostMapping("/modifier-categorie")
+    public String modifierVoyage(@ModelAttribute Categorie categorie) {
+    	
+        Categorie categorieExistant = categorieRepository.findById(categorie.getIdCategorie()).orElse(null);
+
+        if (categorieExistant != null) {
+        	categorieExistant.setImageCategorie(categorie.getImageCategorie());
+        	categorieExistant.setNomCategorie(categorie.getNomCategorie());
+            categorieRepository.save(categorieExistant);
+        } else {
+        	System.out.println("else");
+            return "redirect:/voyages";
+        }
+        return "redirect:/voyages";
+    }   
+    
     /****************CLIENT****************/
     @GetMapping("/categories-client")
     public String afficherCategorieClient(Model model) {
