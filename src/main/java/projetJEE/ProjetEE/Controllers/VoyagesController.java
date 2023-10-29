@@ -1,7 +1,12 @@
 package projetJEE.ProjetEE.Controllers;
 
 import java.sql.Date;
+import java.util.Collections;
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -42,6 +47,7 @@ public class VoyagesController {
     
     @PostMapping("/ajouter-voyage")
     public String ajouterVoyage(@ModelAttribute Voyage voyage) {
+    	System.out.print(voyage);
     	voyageRepository.save(voyage); 
     	return "redirect:/voyages";
 	}
@@ -57,6 +63,8 @@ public class VoyagesController {
     public String modifierVoyageRedirection(@RequestParam Long voyageId,  Model model) {
     	
         Voyage voyage = voyageRepository.findById(voyageId).orElse(null);
+        Iterable<Categorie> categories = categorieRepository.findAll();
+        model.addAttribute("categories", categories);
         model.addAttribute("voyage", voyage);
         return "admin/modifier_voyage_admin";
     }
@@ -69,14 +77,45 @@ public class VoyagesController {
         if (voyageExistant != null) {
             voyageExistant.setVille(voyage.getVille());
             voyageExistant.setDescription(voyage.getDescription());
+            voyageExistant.setPays(voyage.getPays());
+            voyageExistant.setNbPlaces(voyage.getNbPlaces());
+            voyageExistant.setImageVoyage(voyage.getImageVoyage());
+            voyageExistant.setIdCategorie(voyage.getIdCategorie());
             voyageExistant.setPrix_unitaire(voyage.getPrix_unitaire());
             voyageRepository.save(voyageExistant);
-        } else {
-        	System.out.println("else");
-            return "redirect:/voyages";
         }
         return "redirect:/voyages";
     }   
+    
+    @GetMapping("reservations-liste")
+    public String listeReservations(Model model) {
+    	Iterable<Reserver> reservations = reserverRepository.findAll();
+    	
+    	/*Ajout des voyages qui ont au moins une réservation*/
+    	Set<Voyage> voyagesReserves = new HashSet<>();
+        for (Reserver reservation : reservations) {
+            voyagesReserves.add(reservation.getVoyage());
+        } 	
+        
+        /*Calcul du nombre de places réservés dans chaque voyage*/
+        Map<Long, Integer> liste = new HashMap<>();
+        Iterator<Voyage> it = voyagesReserves.iterator();
+        
+        while(it.hasNext()) {
+        	Long idCourant = it.next().getVoyageId();
+        	liste.put(idCourant, 0);
+        	Iterable<Reserver> reservationsVoyages = reserverRepository.findByVoyageVoyageId(idCourant);
+        	Iterator<Reserver> itR = reservationsVoyages.iterator();
+        	while(itR.hasNext()) {
+            	liste.put(idCourant, liste.get(idCourant) + itR.next().getNbPersonnes());
+        	}
+        }
+        
+        model.addAttribute("nbReserves", liste);
+        model.addAttribute("voyagesReserves", voyagesReserves);
+        
+    	return "admin/liste_reservation";
+    }
     
     /****************CLIENT****************/
     @GetMapping("/voyages-client")
@@ -107,7 +146,7 @@ public class VoyagesController {
             Model model) {
     	
     	Voyage voyage = voyageRepository.findById(voyageId).orElse(null);
-
+    	voyage.setNbPlaces(voyage.getNbPlaces() - nbPersonnes);
         Reserver reservation = new Reserver();
         reservation.setNbPersonnes(nbPersonnes);
         reservation.setDateDebut(dateDebut);

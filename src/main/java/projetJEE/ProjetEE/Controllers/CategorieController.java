@@ -47,7 +47,6 @@ public class CategorieController {
         if (!file.isEmpty()) {
             try {
                 String fileName = file.getOriginalFilename();
-//            	String fileName = generateRandomString(7);
             	System.out.println(fileName);
 
                 String uploadDir = "/home/cytech/Cours/Ing2/S1/J2E/ProjetEE/src/main/resources/static/img/";
@@ -60,7 +59,6 @@ public class CategorieController {
                 e.printStackTrace();
             }
         }
-        System.out.print(categorie);
     	categorieRepository.save(categorie); 
 
     	return "redirect:/listeCategories";
@@ -73,20 +71,26 @@ public class CategorieController {
         return "redirect:/listeCategories";
     }
     
+    @PostMapping("/modifier-categorie-redirection")
+    public String modifierCategorieRedirection(@RequestParam Long idCategorie,  Model model) {
+    	
+        Categorie categorie = categorieRepository.findById(idCategorie).orElse(null);
+        model.addAttribute("categorie", categorie);
+        return "admin/modifier_categorie_admin";
+    }
+    
     @PostMapping("/modifier-categorie")
-    public String modifierVoyage(@ModelAttribute Categorie categorie) {
+    public String modifierCategorie(@ModelAttribute Categorie categorie, @RequestParam("imageCategorie") MultipartFile imageCategorie) {
     	
         Categorie categorieExistant = categorieRepository.findById(categorie.getIdCategorie()).orElse(null);
-
+        System.out.println(categorie);
         if (categorieExistant != null) {
-        	categorieExistant.setImageCategorie(categorie.getImageCategorie());
-        	categorieExistant.setNomCategorie(categorie.getNomCategorie());
+//        	categorieExistant.setImageCategorie(categorie.getImageCategorie());
+            categorieExistant.setNomCategorie(categorie.getNomCategorie());
             categorieRepository.save(categorieExistant);
-        } else {
-        	System.out.println("else");
-            return "redirect:/voyages";
-        }
-        return "redirect:/voyages";
+            }
+            
+        return "redirect:/listeCategories";
     }   
     
     /****************CLIENT****************/

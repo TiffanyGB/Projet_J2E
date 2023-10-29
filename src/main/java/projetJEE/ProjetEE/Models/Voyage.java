@@ -34,6 +34,9 @@ public class Voyage {
     @Column(name="prix_unitaire", unique=false,nullable = false, length = 100)
     private int prix_unitaire;
     
+    @Column(name="nbPlaces", unique=false,nullable = false, length = 100)
+    private int nbPlaces;
+    
     @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH})
     @JoinColumn(name = "idCategorie", referencedColumnName = "idCategorie")
     private Categorie idCategorie;
@@ -92,6 +95,14 @@ public class Voyage {
 
 	public void setPrix_unitaire(int prix_unitaire) {
 		this.prix_unitaire = prix_unitaire;
+	}
+
+	public int getNbPlaces() {
+		return nbPlaces;
+	}
+
+	public void setNbPlaces(int nbPlaces) {
+		this.nbPlaces = nbPlaces;
 	}
 
 	@Override

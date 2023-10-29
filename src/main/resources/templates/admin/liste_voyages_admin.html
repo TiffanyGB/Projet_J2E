@@ -11,6 +11,9 @@
 	<div th:replace="header :: header"></div>
 	<button class="retour"><a th:href="@{/}">Retour à la page d'accueil</a></button>
     <h1>Liste des Voyages</h1>
+    
+    <a th:href="@{/reservations-liste}" style="color: black;">Réservations</a>
+    
     <p>Nombre de catégories: <span th:text="${voyages.size}"></p>
 
     
@@ -23,6 +26,7 @@
                 <th>Description</th>
                 <th>Prix unitaire</th>
                 <th>Catégorie</th>
+                <th>Nombre de places</th>
                 <th>Action</th>
             </tr>
         </thead>
@@ -34,6 +38,7 @@
 		        <td class="description" th:text="${voyage.description}"></td>
 		        <td class="prix" th:text="${voyage.prix_unitaire}"></td>
 		        <td class="categorie" th:text="${voyage.idCategorie.nomCategorie}"></td> 
+		        <td class="nbPlaces" th:text="${voyage.nbPlaces}"></td> 
 
     			 <td>
 	                <form th:action="@{/supprimer-voyage}" method="post">
@@ -57,28 +62,28 @@
 	    <label for="ville">Ville :</label>
 	    <input type="text" id="ville" name="ville" required><br>
 	    
-	    <label for="description">Description :</label>
+	    <label for="description">Description:</label>
 	    <input type="text" id="description" name="description" required><br>
 	    
-	    <label for="prix_unitaire">Prix unitaire :</label>
+	    <label for="prix_unitaire">Prix unitaire:</label>
 	    <input type="number" id="prix_unitaire" name="prix_unitaire" required><br>
 	    
-	    <label for="imageVoyage">Image du Voyage :</label>
+	    <label for="imageVoyage">Image du Voyage:</label>
 	    <input type="text" id="imageVoyage" name="imageVoyage" required><br>
 	    
 	    <label for="pays">Pays :</label>
 	    <input type="text" id="pays" name="pays" required><br>
 	    
-		<label for="idCategorie">Catégorie :</label>
+	  	<label for="nbPlaces">Nombre de places:</label>
+	    <input type="number" id="nbPlaces" name="nbPlaces" required><br>
+	    
+		<label for="idCategorie">Catégorie:</label>
 		<select id="idCategorie" name="idCategorie" required>
 		    <option value="">Sélectionnez une catégorie</option>
 		    <th:block th:each="categorie : ${categories}">
 		        <option th:value="${categorie.idCategorie}" th:text="${categorie.nomCategorie}"></option>
 		    </th:block>
 		</select>
-
-	    
-	    <br>
 	    
 	    <button type="submit">Ajouter Voyage</button>
 	</form>
