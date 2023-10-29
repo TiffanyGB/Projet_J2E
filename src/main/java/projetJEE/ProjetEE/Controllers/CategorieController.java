@@ -38,7 +38,31 @@ public class CategorieController {
 	}
 
     
+    @PostMapping("/ajouter-categorie")
+    public String ajouterCategorie(@ModelAttribute Categorie categorie,
+    		@RequestParam("nomCategorie") String nomCategorie, 
+    		@RequestParam("file") MultipartFile file) {
+    	
 
+        if (!file.isEmpty()) {
+            try {
+                String fileName = file.getOriginalFilename();
+            	System.out.println(fileName);
+
+                String uploadDir = "/home/cytech/Cours/Ing2/S1/J2E/ProjetEE/src/main/resources/static/img/";
+                File dest = new File(uploadDir + fileName);
+
+                file.transferTo(dest);
+                categorie.setImageCategorie(fileName);
+
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+    	categorieRepository.save(categorie); 
+
+    	return "redirect:/listeCategories";
+	}
     
     
     @PostMapping("/supprimer-categorie")
