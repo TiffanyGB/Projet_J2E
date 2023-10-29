@@ -1,0 +1,145 @@
+html{
+    font-family : Arial, Helvetica, sans-serif;
+  }
+  
+/*   Style du tableau
+*/ table {
+      border-collapse: collapse;
+      width: 80%;
+      margin: 20px auto;
+  }
+  
+
+  th {
+      background-color: #007BFF;
+      color: #fff;
+      text-align: left;
+      padding: 8px;
+  }
+  
+
+  td {
+      border: 1px solid #ddd;
+      padding: 8px;
+  }
+  
+
+  tr:nth-child(even) {
+      background-color: #f2f2f2;
+  } 
+  
+  
+  #img_accueil{
+      width: 100%;
+      position: absolute;
+      left: 0;
+  }
+  
+  .grid-container {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr); /* Crée 3 colonnes égales */
+    gap: 10px; /* Espace entre les éléments */
+    margin: 50px;
+}
+
+.grid-item {
+    padding: 10px; /* Espace intérieur pour les éléments */
+    text-align: center;
+}
+
+  
+  /****************BOUTONS*******************/
+  .submit {
+  text-decoration: none;
+  padding: 12px;
+  font-size: 1em;
+  color: #FFFFFF;
+  background-color: #00b0f0;
+  border-radius: 12px;
+  border: none;
+  width: 50%;
+  cursor: pointer;
+  }
+  
+  
+  .submit:hover {
+  background-color: #31859b;
+  }
+
+  .content{
+    display: flex;
+    flex-direction: column;
+  }
+
+  h1{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #3e3e3e;
+  }
+  
+  #dest{
+    margin-top: 20em;
+  }
+
+  a {
+    text-decoration: none;
+    font-size: large;
+}
+
+a:visited {
+    color: white;
+}
+
+.retour{
+    cursor: pointer;
+    margin: 20px;
+    padding: 10px;
+    border-radius: 25px;
+    color: white;
+    background-color: #3e3e3e;
+    width: 13%;
+    height: 50px;
+    border: none;
+}
+
+.retour:hover {
+    background-color: black;
+}
+
+.fond {
+    background-image: url("../img/world.png");
+    width: 100%;
+      position: absolute;
+      left: 0;
+      bottom: 0;
+      top: 110px;
+      display: flex;
+      justify-content: center;
+}
+
+#recherche{
+    width: 500px;
+    height: 50px;
+    
+}
+
+#loupe{
+    width: 40px;
+    height: 40px;
+}
+
+#btn-loupe{
+    background-color: rgb(84, 168, 140);
+    width: 55px;
+    height: 55px;
+    border: none;
+}
+
+#rechercher{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: absolute;
+    top: 150px;
+}

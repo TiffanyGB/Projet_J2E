@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Voyages</title>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/style.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/css/header.css}">
+
+</head>
+<body>
+	
+	<div th:replace="header :: header"></div>
+	<button class="retour"><a th:href="@{/voyages-client}">Retour à la page d'accueil</a></button>
+
+
+	<h1>Confirmation de la réservation pour&nbsp;  <span th:text="${voyage.ville}"></span></h1>
+<!--	<p>Un email vous a été envoyé à l'adresse: </p>
+-->	<p>Informations du voyage: </p>
+	<p>Pays: <span th:text="${voyage.pays}"></p>
+	<p>Nb de personnes: <span th:text="${reservation.nbPersonnes}"></p>
+    <p>Date de départ: <span th:text="${reservation.dateDebut}"></p>
+    <p>Date de retour: <span th:text="${reservation.dateFin}"></p>
+    <p>Prix par personne: <span th:text="${voyage.prix_unitaire}"></span>
+    <p>Prix total: <span th:text="${reservation.getPrixTotal}"> €</p>
+
+
+	
+
+	</body>
+</html>

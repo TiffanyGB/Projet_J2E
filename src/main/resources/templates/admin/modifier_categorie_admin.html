@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Voyages</title>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/style.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/css/header.css}">
+
+</head>
+<body>
+	<div th:replace="header :: header"></div>
+	<button class="retour"><a th:href="@{/voyages}">Retour à la liste des catégories</a></button>
+
+    <h1>Modification de: <span th:text = "${categorie.nomCategorie}"></span></h1>
+    
+    <form th:action="@{/modifier-categorie}" method="post">
+        <input type="hidden" name="idCategorie" th:value="${categorie.idCategorie}" />
+        
+        <label for="nomCategorie">Nom :</label>
+        <input type="text" id="nomCategorie" name="nomCategorie" th:value="${categorie.nomCategorie}" required><br>
+        
+       <!-- <label for="imageCategorie">Image de la catégorie :</label>
+	    <input type="file" name="imageCategorie" id="imageCategorie" class="form-control-file">-->
+
+    	<button type="submit">Modifier Catégorie</button>
+    </form>
+	
+	</body>
+</html>
