@@ -57,36 +57,7 @@
     
     </br>
     </br>
-    
-	<form th:action="@{/ajouter-voyage}" method="post">
-	    <label for="ville">Ville :</label>
-	    <input type="text" id="ville" name="ville" required><br>
-	    
-	    <label for="description">Description:</label>
-	    <input type="text" id="description" name="description" required><br>
-	    
-	    <label for="prix_unitaire">Prix unitaire:</label>
-	    <input type="number" id="prix_unitaire" name="prix_unitaire" required><br>
-	    
-	    <label for="imageVoyage">Image du Voyage:</label>
-	    <input type="text" id="imageVoyage" name="imageVoyage" required><br>
-	    
-	    <label for="pays">Pays :</label>
-	    <input type="text" id="pays" name="pays" required><br>
-	    
-	  	<label for="nbPlaces">Nombre de places:</label>
-	    <input type="number" id="nbPlaces" name="nbPlaces" required><br>
-	    
-		<label for="idCategorie">Catégorie:</label>
-		<select id="idCategorie" name="idCategorie" required>
-		    <option value="">Sélectionnez une catégorie</option>
-		    <th:block th:each="categorie : ${categories}">
-		        <option th:value="${categorie.idCategorie}" th:text="${categorie.nomCategorie}"></option>
-		    </th:block>
-		</select>
-	    
-	    <button type="submit">Ajouter Voyage</button>
-	</form>
+
 	
 	</body>
 </html>
