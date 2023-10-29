@@ -31,11 +31,7 @@ public class CategorieController {
 
     /****************ADMIN****************/
    
-    @GetMapping("/listeCategories")
-    public String afficherCategories(Model model) {
-		((Model) model).addAttribute("categories", categorieRepository.findAll());
-		return "admin/liste_catégories_admin";
-	}
+
 
     
     @PostMapping("/ajouter-categorie")
