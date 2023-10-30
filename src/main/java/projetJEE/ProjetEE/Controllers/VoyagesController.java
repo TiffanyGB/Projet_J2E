@@ -17,6 +17,10 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.Jwts;
+import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletRequest;
 import projetJEE.ProjetEE.Models.Categorie;
 import projetJEE.ProjetEE.Models.Reserver;
 import projetJEE.ProjetEE.Models.Voyage;
@@ -38,16 +42,17 @@ public class VoyagesController {
 
     /****************ADMIN****************/
     @GetMapping("/voyages")
-    public String afficherListeVoyages(Model model) {
+    public String afficherListeVoyages(HttpServletRequest request, Model model) {
 		((Model) model).addAttribute("voyages", voyageRepository.findAll());
         Iterable<Categorie> categories = categorieRepository.findAll();
         model.addAttribute("categories", categories);
+	    extractTokenInfo(request, model);
+
 		return "admin/liste_voyages_admin";
 	}
     
     @PostMapping("/ajouter-voyage")
     public String ajouterVoyage(@ModelAttribute Voyage voyage) {
-    	System.out.print(voyage);
     	voyageRepository.save(voyage); 
     	return "redirect:/voyages";
 	}
@@ -88,7 +93,7 @@ public class VoyagesController {
     }   
     
     @GetMapping("reservations-liste")
-    public String listeReservations(Model model) {
+    public String listeReservations(HttpServletRequest request,Model model) {
     	Iterable<Reserver> reservations = reserverRepository.findAll();
     	
     	/*Ajout des voyages qui ont au moins une réservation*/
@@ -110,6 +115,8 @@ public class VoyagesController {
             	liste.put(idCourant, liste.get(idCourant) + itR.next().getNbPersonnes());
         	}
         }
+	    extractTokenInfo(request, model);
+
         
         model.addAttribute("nbReserves", liste);
         model.addAttribute("voyagesReserves", voyagesReserves);
@@ -119,22 +126,25 @@ public class VoyagesController {
     
     /****************CLIENT****************/
     @GetMapping("/voyages-client")
-    public String afficherListeVoyages_client(Model model) {
+    public String afficherListeVoyages_client(Model model,HttpServletRequest request) {
 		((Model) model).addAttribute("voyages", voyageRepository.findAll());
         Iterable<Categorie> categories = categorieRepository.findAll();
         model.addAttribute("categories", categories);
+	    extractTokenInfo(request, model);
+
 		return "client/liste_voyages_client";
 	}
     
     @PostMapping("/reservation")
-    public String ajouterPanier(@RequestParam Long voyageId,  Model model) {
+    public String ajouterPanier(HttpServletRequest request,@RequestParam Long voyageId,  Model model) {
         Voyage voyage = voyageRepository.findById(voyageId).orElse(null);
         Categorie categorie = voyage.getIdCategorie();
         String nomCategorie = categorie.getNomCategorie();
         
         model.addAttribute("voyage", voyage);
         model.addAttribute("nomCategorie", nomCategorie);
-        
+		extractTokenInfo(request, model);
+
         return "client/form_reservation";
 	}
 
@@ -143,7 +153,8 @@ public class VoyagesController {
             @RequestParam("dateDebut") Date dateDebut, 
             @RequestParam("dateFin") Date dateFin, 
             @RequestParam("voyageId") Long voyageId, 
-            Model model) {
+            Model model,
+            HttpServletRequest request) {
     	
     	Voyage voyage = voyageRepository.findById(voyageId).orElse(null);
     	voyage.setNbPlaces(voyage.getNbPlaces() - nbPersonnes);
@@ -158,26 +169,57 @@ public class VoyagesController {
         
         model.addAttribute("voyage", voyage);
         model.addAttribute("reservation",reservation);
-        
-        System.out.println(model);
+		extractTokenInfo(request, model);
+
     	return "client/confirmation_reservation";
 	}
     
     @GetMapping("/recherche")
-    public String rechercherVoyagesPage() {
+    public String rechercherVoyagesPage(HttpServletRequest request, Model model) {
+    	extractTokenInfo(request, model);
     	return "client/rechercheVoyages";
     }
     
     @PostMapping("/resultats-recherche")
-    public String resultatsRecherche(@RequestParam("recherche") String recherche, Model model) {
+    public String resultatsRecherche(@RequestParam("recherche") String recherche,HttpServletRequest request, Model model) {
     	Iterable<Voyage> voyagesPays = voyageRepository.findByPaysContainingIgnoreCase(recherche);
     	Iterable<Voyage> voyagesVilles = voyageRepository.findByVilleContainingIgnoreCase(recherche);
         Set<Voyage> resultatsRecherche = new HashSet<>();
         voyagesPays.forEach(resultatsRecherche::add);
         voyagesVilles.forEach(resultatsRecherche::add);
         model.addAttribute("resultats",resultatsRecherche);
-
+        extractTokenInfo(request, model);
     	return "client/rechercheResultats";
+    }
+    
+    private void extractTokenInfo(HttpServletRequest request, Model model) {
+        Cookie[] cookies = request.getCookies();
+        String token = null;
+
+        if (cookies != null) {
+            for (Cookie cookie : cookies) {
+                if ("token".equals(cookie.getName())) {
+                    token = cookie.getValue();
+                    break;
+                }
+            }
+        }
+
+        if (token != null) {
+            String secretKey = "abcdef";
+
+            Claims claims = Jwts.parser()
+                    .setSigningKey(secretKey)
+                    .parseClaimsJws(token)
+                    .getBody();
+
+            String username = claims.getSubject();
+            Boolean role = (Boolean) claims.get("role");
+
+            model.addAttribute("username", username);
+            model.addAttribute("token", token);
+            model.addAttribute("role", role);
+        }
     }
 
 }

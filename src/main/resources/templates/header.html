@@ -14,14 +14,19 @@
             <nav>
                 <ul>
                     <li><a th:href="@{/}">Accueil</a></li>
-                    <li><a th:href="@{/categories-client}">Nos Catégories</a></li>
-                    <li><a th:href="@{/voyages-client}">Nos voyages</a></li>
+                    <li th:if="${role != true}"><a th:href="@{/categories-client}">Nos Catégories</a></li>
+                    <li th:if="${role != true}"><a th:href="@{/voyages-client}">Nos voyages</a></li>
                     <li><a th:href="@{/recherche}">Recherche</a></li>
-<!--                    <li><a th:href="@{/favoris}">Favoris</a></li>
--->					<li><a th:href="@{/connexion}">Connexion</a></li>
-					<li><a th:href="@{/inscription}">Inscription</a></li>					
-                    <li><a th:href="@{/voyages}">Gérer les voyages</a></li>
-					<li><a th:href="@{/listeCategories}">Gérer les catégories</a></li>
+                    
+    				<li th:if="${role == false}"><a th:href="@{/favoris}">Favoris</a></li>
+    				
+				    <li th:if="${role == true}"><a th:href="@{/voyages}">Gérer les voyages</a></li>
+				    <li th:if="${role == true}"><a th:href="@{/listeCategories}">Gérer les catégories</a></li>	
+				    		
+				    <li th:unless="${token}"><a th:href="@{/connexion}">Connexion</a></li>
+				    <li th:unless="${token}"><a th:href="@{/inscription}">Inscription</a></li>
+				    <li th:if="${token}"><a th:href="@{/deconnexion}">Déconnexion</a></li>
+				    <li th:if="${token}"><a th:href="@{/profil}">Profil de <span th:text="${username}"></span></a></li>
                 </ul>
             </nav>
 

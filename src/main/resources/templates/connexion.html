@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Voyages</title>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/style.css}">
+     <link rel="stylesheet" type="text/css" th:href="@{/css/header.css}">
+</head>
+<body>
+	<div th:replace="header :: header"></div>
+	<button class="retour"><a th:href="@{/}">Retour à la page d'accueil</a></button>
+
+    <h1>Connexion</h1>
+
+	<form th:action="@{/connexion-verif}" method="post">
+	    <label for="email">Adresse mail:</label>
+	    <input type="text" id="email" name="email" required>
+	    
+	    <label for="mdp">Mot de passe:</label>
+	    <input type="text" name="mdp" id="mdp">
+	        
+	    <button type="submit">Connexion</button>
+	</form>
+	
+	</body>
+</html>

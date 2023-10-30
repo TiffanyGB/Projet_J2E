@@ -18,9 +18,9 @@ public class Reserver {
     @Column(name = "idReservation")
     private Long idReservation;    
     
-//    @ManyToOne
-//    @JoinColumn(name = "idUtilisateur",  referencedColumnName = "idUtilisateur")
-//    private Utilisateur utilisateur;
+    @ManyToOne
+    @JoinColumn(name = "idUtilisateur",  referencedColumnName = "idUtilisateur")
+    private Utilisateur utilisateur;
 
     @ManyToOne
     @JoinColumn(name = "idVoyage",  referencedColumnName = "voyageId")
@@ -43,13 +43,13 @@ public class Reserver {
 
     // Getters and setters
 
-//    public Utilisateur getUtilisateur() {
-//        return utilisateur;
-//    }
-//
-//    public void setUtilisateur(Utilisateur utilisateur) {
-//        this.utilisateur = utilisateur;
-//    }
+    public Utilisateur getUtilisateur() {
+        return utilisateur;
+    }
+
+    public void setUtilisateur(Utilisateur utilisateur) {
+        this.utilisateur = utilisateur;
+    }
 
     public Voyage getVoyage() {
         return voyage;

@@ -15,6 +15,10 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.Jwts;
+import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletRequest;
 import projetJEE.ProjetEE.Models.Categorie;
 import projetJEE.ProjetEE.Models.Voyage;
 import projetJEE.ProjetEE.Repersitory.CategorieRepository;
@@ -33,8 +37,9 @@ public class CategorieController {
     /****************ADMIN****************/
    
     @GetMapping("/listeCategories")
-    public String afficherCategories(Model model) {
+    public String afficherCategories(HttpServletRequest request, Model model) {
 		((Model) model).addAttribute("categories", categorieRepository.findAll());
+		extractTokenInfo(request, model);
 		return "admin/liste_catégories_admin";
 	}
 
@@ -74,10 +79,11 @@ public class CategorieController {
     }
     
     @PostMapping("/modifier-categorie-redirection")
-    public String modifierCategorieRedirection(@RequestParam Long idCategorie,  Model model) {
+    public String modifierCategorieRedirection(@RequestParam Long idCategorie,  HttpServletRequest request, Model model) {
     	
         Categorie categorie = categorieRepository.findById(idCategorie).orElse(null);
         model.addAttribute("categorie", categorie);
+        extractTokenInfo(request, model);
         return "admin/modifier_categorie_admin";
     }
     
@@ -97,25 +103,31 @@ public class CategorieController {
     
     /****************CLIENT****************/
     @GetMapping("/categories-client")
-    public String afficherCategorieClient(Model model) {
+    public String afficherCategorieClient(HttpServletRequest request,Model model) {
 		((Model) model).addAttribute("categories", categorieRepository.findAll());
+	    extractTokenInfo(request, model);
+
 		return "client/liste_categories_client";
 	}
     
     @GetMapping("/categorie-voyages/{id}")
-    public String categorieDetails(@PathVariable Long id, Model model) {
+    public String categorieDetails(HttpServletRequest request,@PathVariable Long id, Model model) {
         Categorie categorie = categorieRepository.findById(id).orElse(null);
 
         List<Voyage> voyagesDeLaCategorie = voyageRepository.findByIdCategorie(categorie);
         model.addAttribute("voyages", voyagesDeLaCategorie);
         model.addAttribute("categorie", categorie);
-    
+		extractTokenInfo(request, model);
+
         return "client/infos_categorie";
     }
     
     @GetMapping("/")
-    public String accueil(Model model) {
+    public String accueil(HttpServletRequest request, Model model) {
 		((Model) model).addAttribute("categories", categorieRepository.findAll());
+		
+	    extractTokenInfo(request, model);
+
 		return "index";
 	}
     
@@ -160,6 +172,36 @@ public class CategorieController {
             sb.append(randomChar);
         }
         return sb.toString();
+    }
+    
+    private void extractTokenInfo(HttpServletRequest request, Model model) {
+        Cookie[] cookies = request.getCookies();
+        String token = null;
+
+        if (cookies != null) {
+            for (Cookie cookie : cookies) {
+                if ("token".equals(cookie.getName())) {
+                    token = cookie.getValue();
+                    break;
+                }
+            }
+        }
+
+        if (token != null) {
+            String secretKey = "abcdef";
+
+            Claims claims = Jwts.parser()
+                    .setSigningKey(secretKey)
+                    .parseClaimsJws(token)
+                    .getBody();
+
+            String username = claims.getSubject();
+            Boolean role = (Boolean) claims.get("role");
+
+            model.addAttribute("username", username);
+            model.addAttribute("token", token);
+            model.addAttribute("role", role);
+        }
     }
 
 }

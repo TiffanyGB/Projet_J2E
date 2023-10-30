@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Voyages</title>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/style.css}">
+     <link rel="stylesheet" type="text/css" th:href="@{/css/header.css}">
+</head>
+<body>
+	<div th:replace="header :: header"></div>
+	<button class="retour"><a th:href="@{/}">Retour à la page d'accueil</a></button>
+
+    <h1>Inscription</h1>
+
+    
+	<form th:action="@{/inscription-enregistrer}" method="post" >
+	    <label for="nom">Nom:</label>
+	    <input type="text" id="nom" name="nom" required>
+	    
+	    <label for="prenom">Prénom</label>
+	    <input type="text" name="prenom" id="prenom" >
+	    
+	    <label for="numeroTelephone">Numéro de téléphone</label>
+	    <input type="text" name="numeroTelephone" id="numeroTelephone" >
+	    
+	    <label for="email">Adresse mail</label>
+	    <input type="email" name="email" id="email" >
+
+	    <label for="mdp">Mot de passe</label>
+	    <input type="password" name="mdp" id="mdp" >
+	        
+	    <button type="submit">S'inscrire</button>
+	</form>
+	
+	</body>
+</html>

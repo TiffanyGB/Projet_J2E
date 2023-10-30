@@ -17,6 +17,9 @@ public class Utilisateur {
     @Column(name="nom", unique=false, nullable = false, length = 50)
     private String nom;
     
+    @Column(name="admin", unique=false, nullable = false, length = 50)
+    private Boolean admin;
+    
     @Column(name="prenom", unique=false, nullable = false, length = 50)
     private String prenom;
     
@@ -25,6 +28,9 @@ public class Utilisateur {
 	
 	@Column(name = "numeroTelephone", nullable = false)
     private String numeroTelephone;
+	
+    @Column(name="mdp", unique=false,nullable = false, length = 50)
+    private String mdp;
     
 	public Long getIdUtilisateur() {
 		return idUtilisateur;
@@ -56,5 +62,18 @@ public class Utilisateur {
 	public void setNumeroTelephone(String numeroTelephone) {
 		this.numeroTelephone = numeroTelephone;
 	}
+	public Boolean getAdmin() {
+		return admin;
+	}
+	public void setAdmin(Boolean admin) {
+		this.admin = admin;
+	}
+	public String getMdp() {
+		return mdp;
+	}
+	public void setMdp(String mdp) {
+		this.mdp = mdp;
+	}
+	
     
 }

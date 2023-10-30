@@ -15,7 +15,7 @@
     <p>Nombre de catégories: <span th:text="${voyages.size}"></p>
 
     
-    <table>
+    <table th:if="${voyages.size() > 0}">
         <thead>
             <tr>
 				<th>Image</th>
@@ -49,8 +49,6 @@
         </tbody>
     </table>
     
-    </br>
-    </br>
 	
 	</body>
 </html>
