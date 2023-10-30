@@ -10,12 +10,13 @@
 	<body>
 	    <div th:replace="header :: header"></div>
 
+	<br><br><br>
     <div class="content">
         <img id="img_accueil" src="/img/imgAccueil.jpg" alt="Logo">
-
-    <h1 id="dest">Nos destinations</h1>
     </div>
-		
+    
+	<h1 id="dest">Nos destinations</h1>
+
 		
     <div class="grid-container">
         <div class="grid-item" th:each="categorie : ${categories}">
