@@ -44,6 +44,7 @@ public class CategorieController {
     		@RequestParam("file") MultipartFile file) {
     	
 
+    	
         if (!file.isEmpty()) {
             try {
                 String fileName = file.getOriginalFilename();
