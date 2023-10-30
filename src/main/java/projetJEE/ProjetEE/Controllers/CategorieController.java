@@ -20,6 +20,7 @@ import projetJEE.ProjetEE.Models.Voyage;
 import projetJEE.ProjetEE.Repersitory.CategorieRepository;
 import projetJEE.ProjetEE.Repersitory.VoyageRepository;
 
+
 @Controller
 public class CategorieController {
 

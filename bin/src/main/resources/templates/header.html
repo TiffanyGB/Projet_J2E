@@ -1,0 +1,30 @@
+<!-- src/main/resources/templates/header.html -->
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Mon En-tête</title>
+<!--    <link rel="stylesheet" type="text/css" th:href="@{/css/header.css}">
+-->
+</head>
+<body >
+	    <header>
+		   <img id="logo" src="/img/logo.png" alt="Logo" />
+
+            <nav>
+                <ul>
+                    <li><a th:href="@{/}">Accueil</a></li>
+                    <li><a th:href="@{/categories-client}">Nos Catégories</a></li>
+                    <li><a th:href="@{/voyages-client}">Nos voyages</a></li>
+                    <li><a th:href="@{/recherche}">Recherche</a></li>
+<!--                    <li><a th:href="@{/favoris}">Favoris</a></li>
+-->					<li><a th:href="@{/connexion}">Connexion</a></li>
+					<li><a th:href="@{/inscription}">Inscription</a></li>					
+                    <li><a th:href="@{/voyages}">Gérer les voyages</a></li>
+					<li><a th:href="@{/listeCategories}">Gérer les catégories</a></li>
+                </ul>
+            </nav>
+
+	    </header>
+</body>
+</html>
