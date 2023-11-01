@@ -23,9 +23,11 @@ import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import projetJEE.ProjetEE.Models.Categorie;
 import projetJEE.ProjetEE.Models.Reserver;
+import projetJEE.ProjetEE.Models.Utilisateur;
 import projetJEE.ProjetEE.Models.Voyage;
 import projetJEE.ProjetEE.Repersitory.CategorieRepository;
 import projetJEE.ProjetEE.Repersitory.ReserverRepository;
+import projetJEE.ProjetEE.Repersitory.UtilisateurRepository;
 import projetJEE.ProjetEE.Repersitory.VoyageRepository;
 
 @Controller
@@ -39,14 +41,23 @@ public class VoyagesController {
     
     @Autowired
     private ReserverRepository reserverRepository;
+    
+    @Autowired
+    private UtilisateurRepository utilisateurRepository;
 
     /****************ADMIN****************/
     @GetMapping("/voyages")
     public String afficherListeVoyages(HttpServletRequest request, Model model) {
+	    extractTokenInfo(request, model);
+
+	    /*Mauvais profil, il faut etre admin*/
+	    if ((model.getAttribute("role") == null) || !(boolean) model.getAttribute("role")) {
+	        return "redirect:/";
+	    }
+	    
 		((Model) model).addAttribute("voyages", voyageRepository.findAll());
         Iterable<Categorie> categories = categorieRepository.findAll();
         model.addAttribute("categories", categories);
-	    extractTokenInfo(request, model);
 
 		return "admin/liste_voyages_admin";
 	}
@@ -65,8 +76,13 @@ public class VoyagesController {
     
     
     @PostMapping("/modifier-voyage-redirection")
-    public String modifierVoyageRedirection(@RequestParam Long voyageId,  Model model) {
-    	
+    public String modifierVoyageRedirection(HttpServletRequest request,@RequestParam Long voyageId,  Model model) {
+	    extractTokenInfo(request, model);
+
+	    /*Mauvais profil, il faut etre admin*/
+	    if ((model.getAttribute("role") == null) || !(boolean) model.getAttribute("role")) {
+	        return "redirect:/";
+	    }
         Voyage voyage = voyageRepository.findById(voyageId).orElse(null);
         Iterable<Categorie> categories = categorieRepository.findAll();
         model.addAttribute("categories", categories);
@@ -75,8 +91,14 @@ public class VoyagesController {
     }
     
     @PostMapping("/modifier-voyage")
-    public String modifierVoyage(@ModelAttribute Voyage voyage) {
-    	
+    public String modifierVoyage(HttpServletRequest request,@ModelAttribute Voyage voyage, Model model) {
+	    extractTokenInfo(request, model);
+
+	    /*Mauvais profil, il faut etre admin*/
+	    if ((model.getAttribute("role") == null) || !(boolean) model.getAttribute("role")) {
+	        return "redirect:/";
+	    }
+	    
         Voyage voyageExistant = voyageRepository.findById(voyage.getVoyageId()).orElse(null);
 
         if (voyageExistant != null) {
@@ -94,6 +116,12 @@ public class VoyagesController {
     
     @GetMapping("reservations-liste")
     public String listeReservations(HttpServletRequest request,Model model) {
+	    extractTokenInfo(request, model);
+
+	    /*Mauvais profil, il faut etre admin*/
+	    if ((model.getAttribute("role") == null) || !(boolean) model.getAttribute("role")) {
+	        return "redirect:/";
+	    }
     	Iterable<Reserver> reservations = reserverRepository.findAll();
     	
     	/*Ajout des voyages qui ont au moins une réservation*/
@@ -115,9 +143,7 @@ public class VoyagesController {
             	liste.put(idCourant, liste.get(idCourant) + itR.next().getNbPersonnes());
         	}
         }
-	    extractTokenInfo(request, model);
 
-        
         model.addAttribute("nbReserves", liste);
         model.addAttribute("voyagesReserves", voyagesReserves);
         
@@ -127,23 +153,58 @@ public class VoyagesController {
     /****************CLIENT****************/
     @GetMapping("/voyages-client")
     public String afficherListeVoyages_client(Model model,HttpServletRequest request) {
-		((Model) model).addAttribute("voyages", voyageRepository.findAll());
-        Iterable<Categorie> categories = categorieRepository.findAll();
-        model.addAttribute("categories", categories);
 	    extractTokenInfo(request, model);
+
+	    /*Mauvais profil, il faut etre client connecté ou non*/
+	    if ((model.getAttribute("role") != null) && (boolean) model.getAttribute("role")) {
+	        return "redirect:/";
+	    } 
+	    
+	    /*Recherche de tous les voyages*/
+	    Iterable<Voyage> voyages = voyageRepository.findAll();
+        Map<Long, Boolean> voyagesWithReservationStatus = new HashMap<>();
+
+	    if (!model.asMap().isEmpty()) {
+		    /*Rechercher du client*/
+
+		    Iterable<Utilisateur> tmp = utilisateurRepository.findByEmail((String) model.getAttribute("email"));
+	    	Iterator<Utilisateur> iterator = tmp.iterator();
+		    Utilisateur user = iterator.next();
+	    	
+		    /*Déterminer les voyages déjà réservés par celui-ci*/
+
+	        for (Voyage voyage : voyages) {
+	            List<Reserver> reservations = reserverRepository.findByUtilisateurAndVoyage(user, voyage);
+	            boolean hasReservation = !reservations.isEmpty();
+	            voyagesWithReservationStatus.put(voyage.getVoyageId(), hasReservation);
+	        } 
+	        
+	        model.addAttribute("voyagesWithReservationStatus", voyagesWithReservationStatus);
+		    model.addAttribute("token", true);
+
+	    }else {
+	        for (Voyage voyage : voyages) {
+	            voyagesWithReservationStatus.put(voyage.getVoyageId(), false);
+	        } 
+	    }
+	    
+	    model.addAttribute("voyages", voyages);
 
 		return "client/liste_voyages_client";
 	}
     
+    
     @PostMapping("/reservation")
     public String ajouterPanier(HttpServletRequest request,@RequestParam Long voyageId,  Model model) {
+    	
+	    extractTokenInfo(request, model);
+	    
         Voyage voyage = voyageRepository.findById(voyageId).orElse(null);
         Categorie categorie = voyage.getIdCategorie();
         String nomCategorie = categorie.getNomCategorie();
         
         model.addAttribute("voyage", voyage);
         model.addAttribute("nomCategorie", nomCategorie);
-		extractTokenInfo(request, model);
 
         return "client/form_reservation";
 	}
@@ -156,6 +217,13 @@ public class VoyagesController {
             Model model,
             HttpServletRequest request) {
     	
+		extractTokenInfo(request, model);
+
+	    Iterable<Utilisateur> tmp = utilisateurRepository.findByEmail((String) model.getAttribute("email"));
+    	Iterator<Utilisateur> iterator = tmp.iterator();
+	    Utilisateur user = iterator.next();
+	    Long userId = user.getIdUtilisateur();
+	    
     	Voyage voyage = voyageRepository.findById(voyageId).orElse(null);
     	voyage.setNbPlaces(voyage.getNbPlaces() - nbPersonnes);
         Reserver reservation = new Reserver();
@@ -163,13 +231,13 @@ public class VoyagesController {
         reservation.setDateDebut(dateDebut);
         reservation.setDateFin(dateFin);
         reservation.setVoyage(voyage);
+        reservation.setUtilisateur(user);
         reservation.setPrixTotal(nbPersonnes * voyage.getPrix_unitaire());
 
         reserverRepository.save(reservation);
         
         model.addAttribute("voyage", voyage);
         model.addAttribute("reservation",reservation);
-		extractTokenInfo(request, model);
 
     	return "client/confirmation_reservation";
 	}
@@ -177,6 +245,10 @@ public class VoyagesController {
     @GetMapping("/recherche")
     public String rechercherVoyagesPage(HttpServletRequest request, Model model) {
     	extractTokenInfo(request, model);
+	    /*Mauvais profil, il faut etre client connecté ou non*/
+	    if ((model.getAttribute("role") != null) && (boolean) model.getAttribute("role")) {
+	        return "redirect:/";
+	    } 
     	return "client/rechercheVoyages";
     }
     
@@ -185,12 +257,21 @@ public class VoyagesController {
     	Iterable<Voyage> voyagesPays = voyageRepository.findByPaysContainingIgnoreCase(recherche);
     	Iterable<Voyage> voyagesVilles = voyageRepository.findByVilleContainingIgnoreCase(recherche);
         Set<Voyage> resultatsRecherche = new HashSet<>();
+        
         voyagesPays.forEach(resultatsRecherche::add);
         voyagesVilles.forEach(resultatsRecherche::add);
+        
         model.addAttribute("resultats",resultatsRecherche);
+        
         extractTokenInfo(request, model);
+	    /*Mauvais profil, il faut etre client connecté ou non*/
+	    if ((model.getAttribute("role") != null) && (boolean) model.getAttribute("role")) {
+	        return "redirect:/";
+	    } 
     	return "client/rechercheResultats";
     }
+    
+
     
     private void extractTokenInfo(HttpServletRequest request, Model model) {
         Cookie[] cookies = request.getCookies();
@@ -215,10 +296,13 @@ public class VoyagesController {
 
             String username = claims.getSubject();
             Boolean role = (Boolean) claims.get("role");
+            String email = (String) claims.get("email");
 
             model.addAttribute("username", username);
             model.addAttribute("token", token);
             model.addAttribute("role", role);
+            model.addAttribute("email", email);
+
         }
     }
 

@@ -53,6 +53,7 @@ public class ConnexionController {
             String token = Jwts.builder()
                     .setSubject(premierUtilisateur.getNom())
                     .claim("role", premierUtilisateur.getAdmin())
+                    .claim("email", premierUtilisateur.getEmail())
                     .setIssuedAt(new Date())
                     .signWith(SignatureAlgorithm.HS256, "abcdef")
                     .compact();

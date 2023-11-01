@@ -32,7 +32,7 @@
 		        <td class="ville" th:text="${voyage.ville}"></td>
 		        <td class="nbPlaces" th:text="${voyage.nbPlaces}"></td>
 		        <td class="nbPlaces" th:text="${nbReserves[voyage.voyageId]}"></td>
-	            <td><form th:action="@{/details-Réservation}" method="post">
+	            <td><form th:action="@{'/reservations-Voyage/' + ${voyage.voyageId}}" method="post">
 	                    <input type="hidden" name="voyageId" th:value="${voyage.voyageId}" />
 	                    <button type="submit">Détails</button>
 	                </form>

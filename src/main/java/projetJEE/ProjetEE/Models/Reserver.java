@@ -29,7 +29,7 @@ public class Reserver {
     @Column(name = "prixTotal")
     private double prixTotal;
 
-    @Column(name = "nbPersonnes")
+	@Column(name = "nbPersonnes")
     private int nbPersonnes;
 
     @Column(name = "dateD")
@@ -38,11 +38,17 @@ public class Reserver {
     @Column(name = "dateF")
     private Date dateFin;
 
-//    @Column(name = "statutReservation")
-//    private String statutReservation;
 
     // Getters and setters
 
+    public Long getIdReservation() {
+		return idReservation;
+	}
+
+	public void setIdReservation(Long idReservation) {
+		this.idReservation = idReservation;
+	}
+	
     public Utilisateur getUtilisateur() {
         return utilisateur;
     }

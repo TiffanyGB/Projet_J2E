@@ -24,6 +24,7 @@
 		                <th>Description</th>
 		                <th>Prix unitaire</th>
 		                <th>Catégorie</th>
+		                <th>Nombre places</th>
 		                <th>Action</th>
 		            </tr>
 		        </thead>
@@ -35,12 +36,17 @@
 				        <td class="description" th:text="${res.description}"></td>
 				        <td class="prix" th:text="${res.prix_unitaire}"></td>
 				        <td class="categorie" th:text="${res.idCategorie.nomCategorie}"></td>
-				        <td> 
-		                <form th:action="@{/reservation}" method="post">
-		                    <input type="hidden" name="voyageId" th:value="${res.voyageId}" />
-		                    <button type="submit">Réserver</button>
-		                </form>
-		                </td>
+				        <td class="nbPlaces" th:text="${res.nbPlaces}"></td> 
+
+				        <td th:if="${res.nbPlaces > 0}"> 
+			                <form th:action="@{/reservation}" method="post">
+			                    <input type="hidden" name="voyageId" th:value="${res.voyageId}" />
+			                    <button type="submit">Réserver</button>
+			                </form>
+		                </td>	            	
+		    			 <td th:if="${res.nbPlaces == 0}">
+			                    <p>Plus de places disponibles</p>
+		            	</td>		                
             	
 					</tr>
 		

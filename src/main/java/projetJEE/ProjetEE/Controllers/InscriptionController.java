@@ -48,6 +48,8 @@ public class InscriptionController {
     	
         String token = Jwts.builder()
                 .setSubject(user.getNom())
+                .claim("role", false)
+                .claim("email", user.getEmail())
                 .setIssuedAt(new Date())
                 .signWith(SignatureAlgorithm.HS256, "abcdef")
                 .compact();

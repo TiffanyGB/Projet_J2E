@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Voyages</title>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/style.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/css/header.css}">
+
+</head>
+<body>
+	<div th:replace="header :: header"></div>
+	<button class="retour"><a th:href="@{/}">Retour à la page d'accueil</a></button>
+    <h1>Réservations du voyage:  <span th:text="${voyage.ville}"></span> </h1>
+   	<p>Prix unitaire: <span th:text="${voyage.prix_unitaire}"> </p>
+   	<p>Total: <span th:text="${reservations.size}"></p>
+
+    <table th:if="${reservations.size() > 0}">
+        <thead>
+            <tr>
+				<th>Client</th>
+				<th>Nombre de personnes</th>
+                <th>Date d'arrivée</th>
+                <th>Date de départ</th>
+                <th>Prix total</th>
+
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr th:each="res : ${reservations}">
+				<td class="Client" th:text="${res.utilisateur.prenom} + ' ' +  ${res.utilisateur.nom}"></td>
+				<td class="nbPersonnes" th:text="${res.nbPersonnes}"></td>
+		        <td class="arrivee" th:text="${res.dateDebut}"></td>
+		        <td class="depart" th:text="${res.dateFin}"></td>
+		        <td class="prix" th:text="${res.nbPersonnes} * ${voyage.prix_unitaire}"></td>
+	            <td><form th:action="@{/annulation}" method="post">
+	                    <input type="hidden" name="reservationId" th:value="${res.idReservation}"/>
+	                    <button type="submit">Annuler</button>
+	                </form>
+            	</td>
+			</tr>
+        </tbody>
+    </table>
+    
+	
+	</body>
+</html>

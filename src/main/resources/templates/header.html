@@ -26,10 +26,14 @@
 				    <li th:unless="${token}"><a th:href="@{/connexion}">Connexion</a></li>
 				    <li th:unless="${token}"><a th:href="@{/inscription}">Inscription</a></li>
 				    <li th:if="${token}"><a th:href="@{/deconnexion}">Déconnexion</a></li>
-				    <li th:if="${token}"><a th:href="@{/profil}">Profil de <span th:text="${username}"></span></a></li>
+				    <li th:if="${role == false}"><a th:href="@{/profil-Client}">Profil de <span th:text="${username}"></span></a></li>
+				    <li th:if="${role == true}">Profil administrateur</li>
+				    
                 </ul>
             </nav>
-
+			<br><br><br><br>
 	    </header>
+	    
+	    
 </body>
 </html>

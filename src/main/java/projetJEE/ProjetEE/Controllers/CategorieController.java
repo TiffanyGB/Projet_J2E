@@ -40,6 +40,11 @@ public class CategorieController {
     public String afficherCategories(HttpServletRequest request, Model model) {
 		((Model) model).addAttribute("categories", categorieRepository.findAll());
 		extractTokenInfo(request, model);
+		
+	    /*Mauvais profil, il faut etre admin*/
+	    if ((model.getAttribute("role") == null) || !(boolean) model.getAttribute("role")) {
+	        return "redirect:/";
+	    }
 		return "admin/liste_catégories_admin";
 	}
 
@@ -48,8 +53,6 @@ public class CategorieController {
     public String ajouterCategorie(@ModelAttribute Categorie categorie,
     		@RequestParam("nomCategorie") String nomCategorie, 
     		@RequestParam("file") MultipartFile file) {
-    	
-
     	
         if (!file.isEmpty()) {
             try {
@@ -80,16 +83,27 @@ public class CategorieController {
     
     @PostMapping("/modifier-categorie-redirection")
     public String modifierCategorieRedirection(@RequestParam Long idCategorie,  HttpServletRequest request, Model model) {
-    	
+        extractTokenInfo(request, model);
+        
+	    /*Mauvais profil, il faut etre admin*/
+	    if ((model.getAttribute("role") == null) || !(boolean) model.getAttribute("role")) {
+	        return "redirect:/";
+	    }   	
         Categorie categorie = categorieRepository.findById(idCategorie).orElse(null);
         model.addAttribute("categorie", categorie);
-        extractTokenInfo(request, model);
+
         return "admin/modifier_categorie_admin";
     }
     
     @PostMapping("/modifier-categorie")
-    public String modifierCategorie(@ModelAttribute Categorie categorie, @RequestParam("imageCategorie") MultipartFile imageCategorie) {
+    public String modifierCategorie(HttpServletRequest request, Model model,@ModelAttribute Categorie categorie, @RequestParam("imageCategorie") MultipartFile imageCategorie) {
     	
+        extractTokenInfo(request, model);
+        
+	    /*Mauvais profil, il faut etre admin*/
+	    if ((model.getAttribute("role") == null) || !(boolean) model.getAttribute("role")) {
+	        return "redirect:/";
+	    } 
         Categorie categorieExistant = categorieRepository.findById(categorie.getIdCategorie()).orElse(null);
         System.out.println(categorie);
         if (categorieExistant != null) {
@@ -106,6 +120,11 @@ public class CategorieController {
     public String afficherCategorieClient(HttpServletRequest request,Model model) {
 		((Model) model).addAttribute("categories", categorieRepository.findAll());
 	    extractTokenInfo(request, model);
+	    
+	    /*Mauvais profil, il faut etre client connecté ou non*/
+	    if ((model.getAttribute("role") != null) && (boolean) model.getAttribute("role")) {
+	        return "redirect:/";
+	    } 
 
 		return "client/liste_categories_client";
 	}

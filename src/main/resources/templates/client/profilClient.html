@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Voyages</title>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/style.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/css/header.css}">
+
+</head>
+	<div th:replace="header :: header"></div>
+	
+    <h1>Profil de <span th:text="${user.nom}"></span></h1>
+    
+
+    <p>Nom: <span th:text="${user.nom}"></span></p>
+    <p>Prénom: <span th:text="${user.prenom}"></span></p>
+    <p>Téléphone: <span th:text="${user.numeroTelephone}"></span></p>
+    <p>Email <span th:text="${user.email}"></span></p>
+    
+	<form th:action="@{/modifier-profil}" method="post">
+        <input type="hidden" name="voyageId" th:value="${user.idUtilisateur}" />
+        <button type="submit">Modifier</button>
+    </form>
+    
+    <h1>Réservations</h1>
+    
+    <p th:if="${reservations.size() == 0}"> Aucune réservation pour le moment</p>
+    <p th:if="${reservations.size() == 0}"> Retour à la page d'accueil lien</p>
+    
+    <p th:if="${reservations.size() > 0}">Total: <span th:text="${reservations.size}"></p>
+    
+    <table th:if="${reservations.size() > 0}">
+        <thead>
+            <tr>
+				<th>Image</th>
+				<th>Pays</th>
+                <th>Ville</th>
+                <th>Nombre de personnes</th>
+                <th>Arrivée</th>
+                <th>Départ</th>
+                <th>Prix total (en €)</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr th:each="res : ${reservations}">
+				<td><img th:src="@{/img/} + ${res.voyage.imageVoyage}" alt="Image du voyage" style="max-width: 50%; max-height: 100px;"></td>
+				<td class="pays" th:text="${res.voyage.pays}"></td>
+		        <td class="ville" th:text="${res.voyage.ville}"></td>
+		        <td class="nbPlaces" th:text="${res.nbPersonnes}"></td>
+		        <td class="debut" th:text="${res.dateDebut}"></td>
+		        <td class="fin" th:text="${res.dateFin}"></td>
+		        <td class="prix" th:text="${res.nbPersonnes * res.voyage.prix_unitaire}"></td>
+	            <td><form th:action="@{/annulation}" method="post">
+	                    <input type="hidden" name="reservationId" th:value="${res.idReservation}" />
+	                    <button type="submit">Annuler</button>
+	                </form>
+            	</td>
+			</tr>
+        </tbody>
+    </table>
+
+	
+	</body>
+</html>
