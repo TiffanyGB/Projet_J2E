@@ -3,7 +3,10 @@ package projetJEE.ProjetEE.Controllers;
 import java.io.File;
 import java.io.IOException;
 import java.security.SecureRandom;
+import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -20,8 +23,12 @@ import io.jsonwebtoken.Jwts;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import projetJEE.ProjetEE.Models.Categorie;
+import projetJEE.ProjetEE.Models.Reserver;
+import projetJEE.ProjetEE.Models.Utilisateur;
 import projetJEE.ProjetEE.Models.Voyage;
 import projetJEE.ProjetEE.Repersitory.CategorieRepository;
+import projetJEE.ProjetEE.Repersitory.ReserverRepository;
+import projetJEE.ProjetEE.Repersitory.UtilisateurRepository;
 import projetJEE.ProjetEE.Repersitory.VoyageRepository;
 
 
@@ -33,6 +40,12 @@ public class CategorieController {
     
     @Autowired
     private VoyageRepository voyageRepository;
+    
+    @Autowired
+    private UtilisateurRepository utilisateurRepository;
+    
+    @Autowired
+    private ReserverRepository reserverRepository;
 
     /****************ADMIN****************/
    
@@ -131,12 +144,36 @@ public class CategorieController {
     
     @GetMapping("/categorie-voyages/{id}")
     public String categorieDetails(HttpServletRequest request,@PathVariable Long id, Model model) {
+		extractTokenInfo(request, model);
+	    
         Categorie categorie = categorieRepository.findById(id).orElse(null);
-
         List<Voyage> voyagesDeLaCategorie = voyageRepository.findByIdCategorie(categorie);
+        Map<Long, Boolean> voyagesWithReservationStatus = new HashMap<>();
+        
+	    if (!model.asMap().isEmpty()) {
+	    	
+		    /*Rechercher du client*/
+		    Iterable<Utilisateur> tmp = utilisateurRepository.findByEmail((String) model.getAttribute("email"));
+	    	Iterator<Utilisateur> iterator = tmp.iterator();
+		    Utilisateur user = iterator.next();
+	    	
+		    /*Déterminer les voyages déjà réservés par celui-ci*/
+	        for (Voyage voyage : voyagesDeLaCategorie) {
+	            List<Reserver> reservations = reserverRepository.findByUtilisateurAndVoyage(user, voyage);
+	            boolean hasReservation = !reservations.isEmpty();
+	            voyagesWithReservationStatus.put(voyage.getVoyageId(), hasReservation);
+	        } 
+	        
+	        model.addAttribute("voyagesWithReservationStatus", voyagesWithReservationStatus);
+
+	    }else {
+	        for (Voyage voyage : voyagesDeLaCategorie) {
+	            voyagesWithReservationStatus.put(voyage.getVoyageId(), false);
+	        } 
+	    }        
+        
         model.addAttribute("voyages", voyagesDeLaCategorie);
         model.addAttribute("categorie", categorie);
-		extractTokenInfo(request, model);
 
         return "client/infos_categorie";
     }
@@ -216,10 +253,14 @@ public class CategorieController {
 
             String username = claims.getSubject();
             Boolean role = (Boolean) claims.get("role");
+            String email = (String) claims.get("email");
+
 
             model.addAttribute("username", username);
             model.addAttribute("token", token);
             model.addAttribute("role", role);
+            model.addAttribute("email", email);
+
         }
     }
 

@@ -14,6 +14,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
@@ -170,7 +171,7 @@ public class VoyagesController {
 		    Iterable<Utilisateur> tmp = utilisateurRepository.findByEmail((String) model.getAttribute("email"));
 	    	Iterator<Utilisateur> iterator = tmp.iterator();
 		    Utilisateur user = iterator.next();
-	    	
+
 		    /*Déterminer les voyages déjà réservés par celui-ci*/
 
 	        for (Voyage voyage : voyages) {
@@ -180,7 +181,6 @@ public class VoyagesController {
 	        } 
 	        
 	        model.addAttribute("voyagesWithReservationStatus", voyagesWithReservationStatus);
-		    model.addAttribute("token", true);
 
 	    }else {
 	        for (Voyage voyage : voyages) {
@@ -194,10 +194,15 @@ public class VoyagesController {
 	}
     
     
-    @PostMapping("/reservation")
-    public String ajouterPanier(HttpServletRequest request,@RequestParam Long voyageId,  Model model) {
+    @PostMapping("/reservation/{voyageId}")
+    public String ajouterPanier(HttpServletRequest request,  @PathVariable Long voyageId,Model model) {
     	
 	    extractTokenInfo(request, model);
+	    /*Mauvais profil, il faut etre client connecté*/
+	    if ((model.getAttribute("role") == null) || (boolean) model.getAttribute("role")) {
+	        return "redirect:/";
+	    } 
+	    
 	    
         Voyage voyage = voyageRepository.findById(voyageId).orElse(null);
         Categorie categorie = voyage.getIdCategorie();
@@ -205,6 +210,31 @@ public class VoyagesController {
         
         model.addAttribute("voyage", voyage);
         model.addAttribute("nomCategorie", nomCategorie);
+
+        return "client/form_reservation";
+	}
+    
+    /*Pour afficher les erreurs*/
+    @GetMapping("/reservation/{voyageId}")
+    public String ajouterPanier1(HttpServletRequest request,  @PathVariable Long voyageId,Model model) {
+    	
+	    extractTokenInfo(request, model);
+	    /*Mauvais profil, il faut etre client connecté*/
+	    if ((model.getAttribute("role") == null) || (boolean) model.getAttribute("role")) {
+	        return "redirect:/";
+	    } 
+	 
+       
+        Voyage voyage = voyageRepository.findById(voyageId).orElse(null);
+        Categorie categorie = voyage.getIdCategorie();
+        String nomCategorie = categorie.getNomCategorie();
+        
+        model.addAttribute("voyage", voyage);
+        model.addAttribute("nomCategorie", nomCategorie);
+        
+        String error = (String) request.getSession().getAttribute("error");
+        request.getSession().removeAttribute("error");
+        model.addAttribute("error", error);
 
         return "client/form_reservation";
 	}
@@ -218,13 +248,23 @@ public class VoyagesController {
             HttpServletRequest request) {
     	
 		extractTokenInfo(request, model);
+	    /*Mauvais profil, il faut etre client connecté*/
+	    if ((model.getAttribute("role") == null) || (boolean) model.getAttribute("role")) {
+	        return "redirect:/";
+	    } 
+	    
+    	Voyage voyage = voyageRepository.findById(voyageId).orElse(null);
+
+    	if(voyage.getNbPlaces() < nbPersonnes) {
+            request.getSession().setAttribute("error", "Le nombre de places souhaitées dépasse le nombre de places disponibles.");
+            return "redirect:/reservation/" + voyageId;
+    	}
+	 
 
 	    Iterable<Utilisateur> tmp = utilisateurRepository.findByEmail((String) model.getAttribute("email"));
     	Iterator<Utilisateur> iterator = tmp.iterator();
 	    Utilisateur user = iterator.next();
-	    Long userId = user.getIdUtilisateur();
 	    
-    	Voyage voyage = voyageRepository.findById(voyageId).orElse(null);
     	voyage.setNbPlaces(voyage.getNbPlaces() - nbPersonnes);
         Reserver reservation = new Reserver();
         reservation.setNbPersonnes(nbPersonnes);
@@ -237,6 +277,7 @@ public class VoyagesController {
         reserverRepository.save(reservation);
         
         model.addAttribute("voyage", voyage);
+        model.addAttribute("user", user);
         model.addAttribute("reservation",reservation);
 
     	return "client/confirmation_reservation";
@@ -254,6 +295,14 @@ public class VoyagesController {
     
     @PostMapping("/resultats-recherche")
     public String resultatsRecherche(@RequestParam("recherche") String recherche,HttpServletRequest request, Model model) {
+    	
+        extractTokenInfo(request, model);
+        
+	    /*Mauvais profil, il faut etre client connecté ou non*/
+	    if ((model.getAttribute("role") != null) && (boolean) model.getAttribute("role")) {
+	        return "redirect:/";
+	    } 
+	    
     	Iterable<Voyage> voyagesPays = voyageRepository.findByPaysContainingIgnoreCase(recherche);
     	Iterable<Voyage> voyagesVilles = voyageRepository.findByVilleContainingIgnoreCase(recherche);
         Set<Voyage> resultatsRecherche = new HashSet<>();
@@ -261,13 +310,35 @@ public class VoyagesController {
         voyagesPays.forEach(resultatsRecherche::add);
         voyagesVilles.forEach(resultatsRecherche::add);
         
+	    /*Recherche de tous les voyages*/
+        Map<Long, Boolean> voyagesWithReservationStatus = new HashMap<>();
+
+	    if (!model.asMap().isEmpty()) {
+		    /*Rechercher du client*/
+
+		    Iterable<Utilisateur> tmp = utilisateurRepository.findByEmail((String) model.getAttribute("email"));
+	    	Iterator<Utilisateur> iterator = tmp.iterator();
+		    Utilisateur user = iterator.next();
+
+		    /*Déterminer les voyages déjà réservés par celui-ci*/
+
+	        for (Voyage voyage : resultatsRecherche) {
+	            List<Reserver> reservations = reserverRepository.findByUtilisateurAndVoyage(user, voyage);
+	            boolean hasReservation = !reservations.isEmpty();
+	            voyagesWithReservationStatus.put(voyage.getVoyageId(), hasReservation);
+	        } 
+	        
+	        model.addAttribute("voyagesWithReservationStatus", voyagesWithReservationStatus);
+
+	    }else {
+	        for (Voyage voyage : resultatsRecherche) {
+	            voyagesWithReservationStatus.put(voyage.getVoyageId(), false);
+	        } 
+	    }
+        
         model.addAttribute("resultats",resultatsRecherche);
         
-        extractTokenInfo(request, model);
-	    /*Mauvais profil, il faut etre client connecté ou non*/
-	    if ((model.getAttribute("role") != null) && (boolean) model.getAttribute("role")) {
-	        return "redirect:/";
-	    } 
+
     	return "client/rechercheResultats";
     }
     

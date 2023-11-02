@@ -11,6 +11,7 @@
 	<button class="retour"><a th:href="@{/categories-client}">Retour à la liste des catégories</a></button>
 	<h1 ><span th:text="${categorie.nomCategorie}"></h1>
 
+	<p th:unless="${token}">Connectez-vous pour réserver</p>
     <table>
         <thead>
             <tr>
@@ -20,6 +21,7 @@
                 <th>Description</th>
                 <th>Prix unitaire</th>
                 <th>Catégorie</th>
+                <th>Nombre de places</th>
                 <th>Action</th>
             </tr>
         </thead>
@@ -31,13 +33,47 @@
 		        <td class="description" th:text="${voyage.description}"></td>
 		        <td class="prix" th:text="${voyage.prix_unitaire}"></td>
 		        <td class="categorie" th:text="${voyage.idCategorie.nomCategorie}"></td> 
-
-    			 <td>
-	                <form th:action="@{/reservation}" method="post">
+				<td th:text="${voyage.nbPlaces}"></td>
+				
+				<!--Connecté (client)-->
+    			 <td th:if="${token != null  && voyage.nbPlaces > 0  && !voyagesWithReservationStatus[voyage.voyageId] && !role}">
+				    <form th:action="@{'/reservation/' + ${voyage.voyageId}}" method="post">
 	                    <input type="hidden" name="voyageId" th:value="${voyage.voyageId}" />
 	                    <button type="submit">Réserver</button>
 	                </form>
             	</td>
+            	
+     			 <td th:if="${token != null  && voyage.nbPlaces == 0 && !voyagesWithReservationStatus[voyage.voyageId] && !role}">
+	                <p>Plus de places disponbles</p>
+            	</td> 
+            	
+				<td th:if="${token !=null && voyagesWithReservationStatus[voyage.voyageId] && !role}">
+				    <p>Déjà réservé</p>
+				</td>            	          	
+            	
+            	<!--Non connecté-->
+    			 <td  th:unless="${token}" th:if="${voyage.nbPlaces > 0}">
+	                <form th:action="@{/connexion}" method="get">
+	                    <button type="submit">Réserver</button>
+	                </form>
+            	</td>
+            	
+    			 <td  th:unless="${token}" th:if="${voyage.nbPlaces == 0}">
+	                    <p >Plus de places disponbles</p>
+            	</td> 
+            	
+            	<!--Admin-->  
+     			 <td th:if="${role}">
+	                
+	                <form th:action="@{/modifier-voyage-redirection}" method="post">
+	                    <input type="hidden" name="voyageId" th:value="${voyage.voyageId}" />
+	                    <button type="submit">Modifier</button>
+	                </form>  
+                	<form th:action="@{/supprimer-voyage}" method="post">
+	                    <input type="hidden" name="voyageId" th:value="${voyage.voyageId}" />
+	                    <button type="submit">Supprimer</button>
+	                </form>            
+            	</td>           	          	            	
 			</tr>
 
         </tbody>

@@ -8,7 +8,10 @@
 </head>
 <body>
 	<div th:replace="header :: header"></div>
-	<button class="retour"><a th:href="@{/voyages-client}">Retour à la page d'accueil</a><button>
+
+
+	<p  th:if="${error != null}" th:text="${error}"></p>
+	<p  th:if="${error != null}">Nombre de place restantes: <span th:text="${voyage.nbPlaces}"></span></p>
 
 
 	<h1>Réservation pour <span th:text="${voyage.ville}"></span></h1>

@@ -143,3 +143,7 @@ a:visited {
     position: absolute;
     top: 150px;
 }
+
+.erreur{
+	color: rgb(175, 0, 0);
+}

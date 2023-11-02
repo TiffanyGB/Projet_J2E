@@ -38,16 +38,39 @@
 				        <td class="categorie" th:text="${res.idCategorie.nomCategorie}"></td>
 				        <td class="nbPlaces" th:text="${res.nbPlaces}"></td> 
 
-				        <td th:if="${res.nbPlaces > 0}"> 
-			                <form th:action="@{/reservation}" method="post">
+
+						<!--********Non connecté********-->
+						<!--Plus de places-->
+						<td th:unless="${token}" th:if="${res.nbPlaces == 0}">
+						        <p>Plus de places disponibles</p>
+						</td>
+
+						<!--Réservation possible-->
+						<td th:unless="${token}" th:if="${res.nbPlaces > 0}">
+						    <form th:action="@{/connexion}" method="get">
+						        <button type="submit">Réserver </button>
+						    </form>
+						</td>-						
+									
+						<!--*********Connecté **********-->		
+						
+						<!--Plus de places-->	
+						<td th:if="${token !=null && res.nbPlaces == 0 && !voyagesWithReservationStatus[res.voyageId]}">
+						  	<p>Plus de places disponibles</p>     
+						</td>
+											
+						<!--Peut réserver-->
+						<td th:if="${token !=null && res.nbPlaces > 0 && !voyagesWithReservationStatus[res.voyageId]}">
+				    		<form th:action="@{'/reservation/' + ${res.voyageId}}" method="post">
 			                    <input type="hidden" name="voyageId" th:value="${res.voyageId}" />
 			                    <button type="submit">Réserver</button>
 			                </form>
-		                </td>	            	
-		    			 <td th:if="${res.nbPlaces == 0}">
-			                    <p>Plus de places disponibles</p>
-		            	</td>		                
-            	
+						</td>-							
+						<!--Déjà une réservation-->
+											
+						<td th:if="${token !=null && voyagesWithReservationStatus[res.voyageId]}">
+						    <p>Déjà réservé</p>
+						</td>        	
 					</tr>
 		
 		        </tbody>

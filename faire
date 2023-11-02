@@ -1,44 +1,21 @@
 A faire site:
 
+
+Profil Administrateur:
 Modification Catégories: nom, image
 Modification des voyages: -->Bug si on ne rechoisie pas la catégorie
 -->Mettre les images comme categorie
-
+Suppression
 
 Utilisateur: vérifier que l'adresse mail est unique sinon erreur
-
+Connexion: erreur login ou mdp
 Hacher mdp
-
-Empecher l'accès à une page si mauvais profil (revoir ce qui a été fait)
-Vérifier les données des form
-
-Probleme nos voyages quand non connecté
-
+Vérifier les données des form 
+ 
+ Lorsqu'on annule, rajouter le nombres de places au voyage
+ 
 BONUS
-
-Supprimer son compte
-page recherche (admin) mettre suppression et modif voyage (ou tout simplement suppr recherche)
+Supprimer son compte, donc supprime toutes les  reservations(client)
 Coups de coeur
 Modifier infos profil nom prenom mdp
- 
- 
- 
- 
- 
- 
- Profil par profil:
- Non connecté: voyage et limiter accès 
- Page voyage --> problemes (possibilités de faire 2e page) (**)
- Page voyages d'une categorie --> Réserver renvoyer vers connexion et plus de places
- Recherche --> reserver redirige vers connexion (avoir une page similaire pour (**)
- 
- Profil Administrateur:
- Enlever recherche
- accès limité: gerer catego voyages, modif des 2, reservations, details reservations
- 
- 
- Client
- Limiter profil, infos reservations, 
- confirmation reservation
- 
- 
+A coté de "déjà réservé" mettre bouton annulé

@@ -41,13 +41,14 @@
 		        <td class="nbPlaces" th:text="${voyage.nbPlaces}"></td> 
 
     			 <td>
-	                <form th:action="@{/supprimer-voyage}" method="post">
-	                    <input type="hidden" name="voyageId" th:value="${voyage.voyageId}" />
-	                    <button type="submit">Supprimer</button>
-	                </form>
+	                
 	                <form th:action="@{/modifier-voyage-redirection}" method="post">
 	                    <input type="hidden" name="voyageId" th:value="${voyage.voyageId}" />
 	                    <button type="submit">Modifier</button>
+	                </form>
+	                <form th:action="@{/supprimer-voyage}" method="post">
+	                    <input type="hidden" name="voyageId" th:value="${voyage.voyageId}" />
+	                    <button type="submit">Supprimer</button>
 	                </form>
             	</td>
 			</tr>

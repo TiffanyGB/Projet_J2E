@@ -37,10 +37,11 @@ public class Voyage {
     @Column(name="nbPlaces", unique=false,nullable = false, length = 100)
     private int nbPlaces;
     
-    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH})
-    @JoinColumn(name = "idCategorie", referencedColumnName = "idCategorie")
+    @ManyToOne
+    @JoinColumn(name = "idCategorie")
     private Categorie idCategorie;
-
+    
+    
 	public Long getVoyageId() {
 		return voyageId;
 	}

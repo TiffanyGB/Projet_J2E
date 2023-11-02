@@ -12,7 +12,9 @@
 	<button class="retour"><a th:href="@{/}">Retour à la page d'accueil</a></button>
 
     <h1>Liste des Voyages</h1>
-    <p>Nombre de catégories: <span th:text="${voyages.size}"></p>
+    <p th:unless="${token}">Connectez-vous pour réserver</p>
+
+    <p>Nombre de voyages: <span th:text="${voyages.size}"></p>
 
     
     <table th:if="${voyages.size() > 0}">
@@ -38,24 +40,32 @@
 		        <td class="categorie" th:text="${voyage.idCategorie.nomCategorie}"></td> 
 		        <td class="nbPlaces" th:text="${voyage.nbPlaces}"></td> 
 		        
-				<td th:unless="${token}">
-				    <form th:action="@{/reservation}" method="post">
-				        <input type="hidden" name="voyageId" th:value="${voyage.voyageId}" />
-				        <button type="submit">Réserver</button>
-				    </form>
-				</td>
-				<td th:if="${token && voyage.nbPlaces > 0 && !voyagesWithReservationStatus[voyage.voyageId]}">
-				    <form th:action="@{/reservation}" method="post">
-				        <input type="hidden" name="voyageId" th:value="${voyage.voyageId}" />
-				        <button type="submit">Réserver</button>
-				    </form>
-				</td>
-
-				<td th:if="${token && voyagesWithReservationStatus[voyage.voyageId]}">
-				    <p>Déjà réservé</p>
+		        <!--Non connecté-->
+				<td th:unless="${token}" th:if="${voyage.nbPlaces == 0}">
+				        <p>Plus de places disponibles</p>
 				</td>
 				
-				<td th:if="${token && voyage.nbPlaces == 0 && !voyagesWithReservationStatus[voyage.voyageId]}">
+				<td th:unless="${token}" th:if="${voyage.nbPlaces > 0}">
+				    <form th:action="@{/connexion}" method="get">
+				        <input type="hidden" name="voyageId" th:value="${voyage.voyageId}" />
+				        <button type="submit">Réserver </button>
+				    </form>
+				</td>
+				
+				<!--Connecté -->
+				<td th:if="${token !=null && voyage.nbPlaces > 0 && !voyagesWithReservationStatus[voyage.voyageId]}">
+				    <form th:action="@{'/reservation/' + ${voyage.voyageId}}" method="post">
+				        <input type="hidden" name="voyageId" th:value="${voyage.voyageId}" />
+				        <button type="submit">Réserver</button>
+				    </form>
+				</td>
+				
+
+				<td th:if="${token !=null && voyagesWithReservationStatus[voyage.voyageId]}">
+				    <p>Déjà réservé </p>
+				</td>
+				
+				<td th:if="${token != null && voyage.nbPlaces == 0 && !voyagesWithReservationStatus[voyage.voyageId]}">
 				    <p>Plus de places disponibles</p>
 				</td>
 

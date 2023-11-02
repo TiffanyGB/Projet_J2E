@@ -16,7 +16,7 @@
                     <li><a th:href="@{/}">Accueil</a></li>
                     <li th:if="${role != true}"><a th:href="@{/categories-client}">Nos Catégories</a></li>
                     <li th:if="${role != true}"><a th:href="@{/voyages-client}">Nos voyages</a></li>
-                    <li><a th:href="@{/recherche}">Recherche</a></li>
+                    <li th:if="${role != true}"><a th:href="@{/recherche}">Recherche</a></li>
                     
     				<li th:if="${role == false}"><a th:href="@{/favoris}">Favoris</a></li>
     				
