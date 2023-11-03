@@ -1,26 +1,16 @@
 package projetJEE.ProjetEE.Controllers;
 
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-import java.io.File;
-import java.io.IOException;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
-import java.security.SecureRandom;
-import java.time.Instant;
 import java.util.Date;
-import java.util.List;
 
-import org.hibernate.sql.ast.tree.expression.Duration;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseCookie;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.multipart.MultipartFile;
 
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
@@ -28,6 +18,9 @@ import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletResponse;
 import projetJEE.ProjetEE.Models.Utilisateur;
 import projetJEE.ProjetEE.Repersitory.UtilisateurRepository;
+
+import org.springframework.security.crypto.bcrypt.BCrypt;
+
 
 
 @Controller
@@ -65,6 +58,12 @@ public class InscriptionController {
             return "redirect:/inscription?error=" + URLEncoder.encode(error, StandardCharsets.UTF_8);
     	}
     	user.setAdmin(false);
+    	
+    	// Hacher le mot de passe avant de l'enregistrer
+        String motDePasse = user.getMdp(); // Mot de passe en texte clair
+        String motDePasseHache = BCrypt.hashpw(motDePasse, BCrypt.gensalt());
+        user.setMdp(motDePasseHache);
+    	
     	utilisateurRepository.save(user);
     	
         String token = Jwts.builder()

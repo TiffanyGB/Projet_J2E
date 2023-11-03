@@ -2,6 +2,7 @@ package projetJEE.ProjetEE.Controllers;
 
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
@@ -21,6 +22,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import projetJEE.ProjetEE.Models.Utilisateur;
 import projetJEE.ProjetEE.Repersitory.UtilisateurRepository;
+import org.springframework.security.crypto.bcrypt.BCrypt;
 
 
 @Controller
@@ -43,14 +45,20 @@ public class ConnexionController {
     		HttpServletResponse response, 
     		Model model,
     		HttpServletRequest request) {
-    	List<Utilisateur> existe = utilisateurRepository.findByEmailAndMdp(user.getEmail(), user.getMdp());
     	
+    	
+        Iterable<Utilisateur> temp = utilisateurRepository.findByEmail(user.getEmail());
+        List<Utilisateur> existe = new ArrayList<>();
+        temp.forEach(existe::add);
+        
     	/*identifiants corrects*/
     	if(existe.size() > 0) {
-        	Iterable<Utilisateur> tmp = utilisateurRepository.findByEmail(user.getEmail());
-        	Iterator<Utilisateur> iterator = tmp.iterator();
-    	    Utilisateur premierUtilisateur = iterator.next();
-    	    
+    		 Utilisateur premierUtilisateur = existe.get(0);
+    		 
+    		 /*Mdp haché*/
+    		 String motDePasseHacheEnBase = premierUtilisateur.getMdp();
+    		 if (BCrypt.checkpw(user.getMdp(), motDePasseHacheEnBase)) {
+    		 
             String token = Jwts.builder()
                     .setSubject(premierUtilisateur.getNom())
                     .claim("role", premierUtilisateur.getAdmin())
@@ -64,13 +72,12 @@ public class ConnexionController {
             response.addCookie(tokenCookie);
             
             return "redirect:/";
+    		 }
     	}
     	/*Identifiants incorrects*/
     	String error = "Email ou mot de passe incorrect.";
     	return "redirect:/connexion?error=" + URLEncoder.encode(error, StandardCharsets.UTF_8);
     	
     }
-    
-   
-
+ 
 }

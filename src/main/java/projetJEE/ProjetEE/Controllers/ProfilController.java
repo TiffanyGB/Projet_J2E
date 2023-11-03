@@ -83,6 +83,23 @@ public class ProfilController {
     	return "redirect:/";
     }
     
+    @PostMapping("/modifier-compte")
+    public String modifierProfil(HttpServletRequest request,  Model model, HttpServletResponse response) {
+	    extractTokenInfo(request, model);
+	    Iterable<Utilisateur> tmp = utilisateurRepository.findByEmail((String) model.getAttribute("email"));
+    	Iterator<Utilisateur> iterator = tmp.iterator();
+	    Utilisateur user = iterator.next();
+	    utilisateurRepository.delete(user);
+	    
+        // Supprimez le cookie en définissant un cookie expiré
+        Cookie cookie = new Cookie("token", "");
+        cookie.setMaxAge(0); // Définissez la durée de vie du cookie à 0 pour le supprimer
+        cookie.setPath("/"); // Assurez-vous que le chemin du cookie correspond à celui qui a été défini lors de la création
+        response.addCookie(cookie);
+    	
+    	return "redirect:/";
+    }
+    
     
     
     private void extractTokenInfo(HttpServletRequest request, Model model) {
