@@ -14,7 +14,6 @@
 
     <p>Nom: <span th:text="${user.nom}"></span></p>
     <p>Prénom: <span th:text="${user.prenom}"></span></p>
-    <p>Téléphone: <span th:text="${user.numeroTelephone}"></span></p>
     <p>Email <span th:text="${user.email}"></span></p>
     
 	<form th:action="@{/modifier-profil}" method="post">

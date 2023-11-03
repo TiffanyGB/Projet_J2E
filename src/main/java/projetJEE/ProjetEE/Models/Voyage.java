@@ -13,6 +13,7 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.Lob;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 
 @Entity
@@ -43,7 +44,9 @@ public class Voyage {
     @Column(name="nbPlaces", unique=false,nullable = false, length = 100)
     private int nbPlaces;
 
-
+    @OneToMany(mappedBy = "voyage", cascade = CascadeType.ALL)
+    private Set<Reserver> reservations = new HashSet<>();
+    
     @ManyToOne
     @JoinColumn(name = "idCategorie")
     private Categorie idCategorie;
@@ -56,6 +59,7 @@ public class Voyage {
 	public void setVoyageId(Long id) {
 		this.voyageId = id;
 	}
+	
 	
 	public byte[] getImageVoyage() {
 		return imageVoyage;
