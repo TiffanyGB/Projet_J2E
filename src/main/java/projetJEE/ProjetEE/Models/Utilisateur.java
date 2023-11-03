@@ -34,7 +34,7 @@ public class Utilisateur {
     @Column(name="email", unique=true,nullable = false, length = 50)
     private String email;
 	
-    @Column(name="mdp", unique=false,nullable = false, length = 50)
+    @Column(name="mdp", unique=false,nullable = false, length = 400)
     private String mdp;
     
     @OneToMany(mappedBy = "utilisateur", cascade = CascadeType.ALL)

@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Voyages</title>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/style.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/css/header.css}">
+
+</head>
+<body>
+	<div th:replace="header :: header"></div>
+	<a class="retour" th:href="@{/voyages}">Retour à la liste des voyages</a>
+
+    <h1>Modification de&nbsp; <span th:text="${voyage.ville}"></span> </h1>
+    
+        <form th:action="@{/modifier-voyage}" method="post" enctype="multipart/form-data">
+        <input type="hidden" name="voyageId" th:value="${voyage.voyageId}" />
+        <label for="ville">Ville :</label>
+        <input type="text" id="ville" name="ville" th:value="${voyage.ville}" required><br>
+        
+        <label for="pays">Pays:</label>
+        <input type="text" id="pays" name="pays" th:value="${voyage.pays}" required><br>
+
+        <label for="description">Description :</label>
+        <input type="text" id="description" name="description" th:value="${voyage.description}" required><br>
+        
+        <label for="nbPlaces">Nombre de places:</label>
+        <input type="text" id="nbPlaces" name="nbPlaces" th:value="${voyage.nbPlaces}" required><br>
+
+        <label for="prix_unitaire">Prix unitaire :</label>
+        <input type="number" id="prix_unitaire" name="prix_unitaire" th:value="${voyage.prix_unitaire}" required><br>
+
+	    <label for="image">Image du Voyage:</label>
+	    <img th:src="@{/displayImage/{id}(id=${voyage.voyageId})}" style="width: 100px;">
+	    <input id="image" th:name="image" type="file" />
+
+		<label for="idCategorie">Catégorie:</label>
+		<select id="idCategorie" name="idCategorie">
+		    <option th:value="${voyage.idCategorie.idCategorie}"><span th:text="${voyage.idCategorie.nomCategorie}"></span></option>
+		    <th:block th:each="categorie : ${categories}">
+		        <option th:value="${categorie.idCategorie}" th:text="${categorie.nomCategorie}"></option>
+		    </th:block>
+		</select>
+
+        <button type="submit">Modifier Voyage</button>
+    </form>
+	
+	</body>
+</html>
