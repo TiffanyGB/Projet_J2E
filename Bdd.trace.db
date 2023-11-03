@@ -664,3 +664,7 @@ Caused by: org.h2.mvstore.MVStoreException: The file is locked: /home/cytech/Cou
 	at org.h2.mvstore.FileStore.open(FileStore.java:128)
 	at org.h2.mvstore.MVStore.<init>(MVStore.java:452)
 	... 59 more
+2023-11-03 19:57:01 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLNonTransientException: The object is already closed [90007-214]
+2023-11-03 20:02:14 jdbc[7]: exception
+org.h2.jdbc.JdbcSQLNonTransientException: The object is already closed [90007-214]
