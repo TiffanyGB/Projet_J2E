@@ -16,8 +16,8 @@
     <p>Prénom: <span th:text="${user.prenom}"></span></p>
     <p>Email <span th:text="${user.email}"></span></p>
     
-	<form th:action="@{/modifier-profil}" method="post">
-        <input type="hidden" name="voyageId" th:value="${user.idUtilisateur}" />
+	<form th:action="@{/modifier-compte-redirection}" method="post">
+        <input type="hidden" name="userId" th:value="${user.idUtilisateur}" />
         <button type="submit">Modifier</button>
     </form>
     

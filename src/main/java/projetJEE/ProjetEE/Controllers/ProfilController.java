@@ -1,5 +1,7 @@
 package projetJEE.ProjetEE.Controllers;
 
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.sql.Date;
 import java.util.Collections;
 import java.util.HashMap;
@@ -10,6 +12,7 @@ import java.util.Map;
 import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -43,7 +46,9 @@ public class ProfilController {
     
     /****************CLIENT****************/
     @GetMapping("/profil-Client")
-    public String profilCLient(HttpServletRequest request, Model model) {
+    public String profilCLient(HttpServletRequest request, 
+    		@RequestParam(name = "id", required = false) Long id,
+    		Model model) {
     	/*Extraire infos token*/
 	    extractTokenInfo(request, model);
 	    
@@ -51,11 +56,15 @@ public class ProfilController {
 	    if (model.asMap().isEmpty() || (model.getAttribute("role") == null) || (boolean) model.getAttribute("role")) {
 	        return "redirect:/";
 	    }
-
+	    Utilisateur user;
 	    /*Chercher les infos du client*/
-	    Iterable<Utilisateur> tmp = utilisateurRepository.findByEmail((String) model.getAttribute("email"));
-    	Iterator<Utilisateur> iterator = tmp.iterator();
-	    Utilisateur user = iterator.next();
+	    if(id == null) {
+		    Iterable<Utilisateur> tmp = utilisateurRepository.findByEmail((String) model.getAttribute("email"));
+	    	Iterator<Utilisateur> iterator = tmp.iterator();
+		    user = iterator.next();
+	    }else {
+	    	user = utilisateurRepository.findById(id).orElse(null);
+	    }
 	    
 	    /*Chercher les réservations du client*/
 	    List<Reserver> reservations = reserverRepository.findByUtilisateur(user);
@@ -76,28 +85,60 @@ public class ProfilController {
 	    
         // Supprimez le cookie en définissant un cookie expiré
         Cookie cookie = new Cookie("token", "");
-        cookie.setMaxAge(0); // Définissez la durée de vie du cookie à 0 pour le supprimer
-        cookie.setPath("/"); // Assurez-vous que le chemin du cookie correspond à celui qui a été défini lors de la création
+        cookie.setMaxAge(0); 
+        cookie.setPath("/"); 
         response.addCookie(cookie);
     	
     	return "redirect:/";
     }
     
-    @PostMapping("/modifier-compte")
-    public String modifierProfil(HttpServletRequest request,  Model model, HttpServletResponse response) {
+    @PostMapping("/modifier-compte-redirection")
+    public String modifierProfilRedirection(HttpServletRequest request,  
+    		Model model, 
+    		HttpServletResponse response,
+    		@RequestParam Long userId) {
 	    extractTokenInfo(request, model);
-	    Iterable<Utilisateur> tmp = utilisateurRepository.findByEmail((String) model.getAttribute("email"));
-    	Iterator<Utilisateur> iterator = tmp.iterator();
-	    Utilisateur user = iterator.next();
-	    utilisateurRepository.delete(user);
 	    
-        // Supprimez le cookie en définissant un cookie expiré
-        Cookie cookie = new Cookie("token", "");
-        cookie.setMaxAge(0); // Définissez la durée de vie du cookie à 0 pour le supprimer
-        cookie.setPath("/"); // Assurez-vous que le chemin du cookie correspond à celui qui a été défini lors de la création
-        response.addCookie(cookie);
+	    /*Mauvais profil*/
+	    if ((model.getAttribute("role") == null) || (boolean) model.getAttribute("role"))  {
+	        return "redirect:/";
+	    }
+	    
+	    Utilisateur user = utilisateurRepository.findById(userId).orElse(null);
+	    model.addAttribute("user", user);
     	
-    	return "redirect:/";
+    	return "client/modifierProfil";
+    }
+    
+    @PostMapping("/modifier-profil")
+    public String modifierProfil(HttpServletRequest request,  
+    		Model model, 
+    		@ModelAttribute Utilisateur user,
+    		@RequestParam Long userId) {
+	    extractTokenInfo(request, model);
+	    
+	    /*Mauvais profil*/
+	    if ((model.getAttribute("role") == null) || (boolean) model.getAttribute("role"))  {
+	        return "redirect:/";
+	    }
+	    
+	    Utilisateur userExistant = utilisateurRepository.findById(userId).orElse(null);
+
+        if (userExistant != null) {
+        	userExistant.setEmail(user.getEmail());   
+            userExistant.setNom(user.getNom());
+            userExistant.setPrenom(user.getPrenom());
+            if(user.getMdp() != "") {
+                String motDePasse = user.getMdp(); 
+                String motDePasseHache = BCrypt.hashpw(motDePasse, BCrypt.gensalt());
+                userExistant.setMdp(motDePasseHache);
+            }
+    	    
+            utilisateurRepository.save(userExistant);
+            Long id = userExistant.getIdUtilisateur();
+        	return "redirect:/profil-Client?id=" + id;
+        }
+    	return "redirect:/profil-Client";
     }
     
     
