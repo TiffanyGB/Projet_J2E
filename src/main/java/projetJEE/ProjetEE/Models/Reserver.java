@@ -19,11 +19,11 @@ public class Reserver {
     private Long idReservation;    
     
     @ManyToOne
-    @JoinColumn(name = "idUtilisateur",  referencedColumnName = "idUtilisateur")
+    @JoinColumn(name = "idUtilisateur", referencedColumnName = "idUtilisateur")
     private Utilisateur utilisateur;
 
     @ManyToOne
-    @JoinColumn(name = "idVoyage",  referencedColumnName = "voyageId")
+    @JoinColumn(name = "idVoyage", referencedColumnName = "voyageId")
     private Voyage voyage;
 
     @Column(name = "prixTotal")

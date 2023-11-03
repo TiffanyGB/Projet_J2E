@@ -1,10 +1,18 @@
 package projetJEE.ProjetEE.Models;
 
+import java.util.HashSet;
+import java.util.Set;
+
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.JoinTable;
+import jakarta.persistence.ManyToMany;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 
 @Entity
@@ -31,6 +39,9 @@ public class Utilisateur {
 	
     @Column(name="mdp", unique=false,nullable = false, length = 50)
     private String mdp;
+    
+    @OneToMany(mappedBy = "utilisateur", cascade = CascadeType.ALL)
+    private Set<Reserver> reservations = new HashSet<>();
     
 	public Long getIdUtilisateur() {
 		return idUtilisateur;

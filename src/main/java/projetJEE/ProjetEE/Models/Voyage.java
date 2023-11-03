@@ -1,5 +1,8 @@
 package projetJEE.ProjetEE.Models;
 
+import java.util.HashSet;
+import java.util.Set;
+
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -7,6 +10,8 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
+import jakarta.persistence.Lob;
+import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 
@@ -19,8 +24,12 @@ public class Voyage {
     @Column(name = "voyageId")
     private Long voyageId;
     
-    @Column(name="imageVoyage", unique=false, nullable = true)
-    private String imageVoyage;
+//    @Column(name="imageVoyage", unique=false, nullable = true)
+//    private String imageVoyage;
+	
+    @Lob
+    @Column(name = "imageVoyage", columnDefinition = "MEDIUMBLOB")
+    private byte[] imageVoyage;
 
 	@Column(name="ville", unique=false, nullable = false, length = 50)
     private String ville;
@@ -36,7 +45,8 @@ public class Voyage {
     
     @Column(name="nbPlaces", unique=false,nullable = false, length = 100)
     private int nbPlaces;
-    
+
+
     @ManyToOne
     @JoinColumn(name = "idCategorie")
     private Categorie idCategorie;
@@ -50,13 +60,23 @@ public class Voyage {
 		this.voyageId = id;
 	}
 	
-    public String getImageVoyage() {
+//    public String getImageVoyage() {
+//		return imageVoyage;
+//	}
+//
+//	public void setImageVoyage(String imageVoyage) {
+//		this.imageVoyage = imageVoyage;
+//	}
+//	
+	
+	public byte[] getImageVoyage() {
 		return imageVoyage;
 	}
 
-	public void setImageVoyage(String imageVoyage) {
+	public void setImageVoyage(byte[] imageVoyage) {
 		this.imageVoyage = imageVoyage;
 	}
+	
 	
 	public Categorie getIdCategorie() {
 		return idCategorie;
@@ -105,14 +125,6 @@ public class Voyage {
 	public void setNbPlaces(int nbPlaces) {
 		this.nbPlaces = nbPlaces;
 	}
-
-	@Override
-	public String toString() {
-		return "Voyage [voyageId=" + voyageId + ", imageVoyage=" + imageVoyage + ", ville=" + ville + ", pays=" + pays
-				+ ", description=" + description + ", prix_unitaire=" + prix_unitaire + ", idCategorie=" + idCategorie
-				+ "]";
-	}
-
 
     
 }

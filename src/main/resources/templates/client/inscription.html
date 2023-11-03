@@ -11,7 +11,10 @@
 	<button class="retour"><a th:href="@{/}">Retour à la page d'accueil</a></button>
 
     <h1>Inscription</h1>
-
+    
+<div th:if="${error}" class="alert alert-danger">
+    <p th:text="${error}"></p>
+</div>
     
 	<form th:action="@{/inscription-enregistrer}" method="post" >
 	    <label for="nom">Nom:</label>

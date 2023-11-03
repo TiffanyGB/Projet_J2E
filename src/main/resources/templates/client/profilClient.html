@@ -22,6 +22,10 @@
         <button type="submit">Modifier</button>
     </form>
     
+	<form th:action="@{/supprimer-compte}" method="post">
+        <button type="submit">Supprimer compte</button>
+    </form>    
+    
     <h1>Réservations</h1>
     
     <p th:if="${reservations.size() == 0}"> Aucune réservation pour le moment</p>
@@ -59,6 +63,8 @@
 			</tr>
         </tbody>
     </table>
+    
+    
 
 	
 	</body>

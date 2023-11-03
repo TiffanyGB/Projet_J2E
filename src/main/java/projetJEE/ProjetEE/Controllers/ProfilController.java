@@ -14,6 +14,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
@@ -21,6 +22,7 @@ import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import projetJEE.ProjetEE.Models.Categorie;
 import projetJEE.ProjetEE.Models.Reserver;
 import projetJEE.ProjetEE.Models.Utilisateur;
@@ -54,7 +56,6 @@ public class ProfilController {
 	    Iterable<Utilisateur> tmp = utilisateurRepository.findByEmail((String) model.getAttribute("email"));
     	Iterator<Utilisateur> iterator = tmp.iterator();
 	    Utilisateur user = iterator.next();
-	    Long userId = user.getIdUtilisateur();
 	    
 	    /*Chercher les réservations du client*/
 	    List<Reserver> reservations = reserverRepository.findByUtilisateur(user);
@@ -64,6 +65,23 @@ public class ProfilController {
 	    
 		return "client/profilClient";
 	}
+    
+    @PostMapping("/supprimer-compte")
+    public String supprimerCompte(HttpServletRequest request,  Model model, HttpServletResponse response) {
+	    extractTokenInfo(request, model);
+	    Iterable<Utilisateur> tmp = utilisateurRepository.findByEmail((String) model.getAttribute("email"));
+    	Iterator<Utilisateur> iterator = tmp.iterator();
+	    Utilisateur user = iterator.next();
+	    utilisateurRepository.delete(user);
+	    
+        // Supprimez le cookie en définissant un cookie expiré
+        Cookie cookie = new Cookie("token", "");
+        cookie.setMaxAge(0); // Définissez la durée de vie du cookie à 0 pour le supprimer
+        cookie.setPath("/"); // Assurez-vous que le chemin du cookie correspond à celui qui a été défini lors de la création
+        response.addCookie(cookie);
+    	
+    	return "redirect:/";
+    }
     
     
     

@@ -1,7 +1,10 @@
 package projetJEE.ProjetEE.Controllers;
 
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import java.io.File;
 import java.io.IOException;
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.security.SecureRandom;
 import java.time.Instant;
 import java.util.Date;
@@ -36,13 +39,31 @@ public class InscriptionController {
     /****************ADMIN****************/
    
     @GetMapping("/inscription")
-    public String inscriptionGET() {
+    public String inscriptionGET(Model model, @RequestParam(name = "error", required = false) String error) {
+  
+        if (error != null) {
+        	model.addAttribute("error", error);
+        }
+        
 		return "client/inscription";
 	}
 
     
     @PostMapping("/inscription-enregistrer")
-    public String enregistrerUtilisateur(@ModelAttribute Utilisateur user, HttpServletResponse response) {
+    public String enregistrerUtilisateur(@ModelAttribute Utilisateur user,
+    		HttpServletResponse response,
+    		Model model) {
+    	
+    	
+    	/*Vérifier que l'adresse mail est unique*/
+    	String email = user.getEmail();
+    	Iterable<Utilisateur> listeUtilisateurs = utilisateurRepository.findByEmail(email);
+    	
+    	/*Email existante*/
+    	if(listeUtilisateurs.iterator().hasNext()) {
+    		String error = "Adresse mail déjà prise";
+            return "redirect:/inscription?error=" + URLEncoder.encode(error, StandardCharsets.UTF_8);
+    	}
     	user.setAdmin(false);
     	utilisateurRepository.save(user);
     	
@@ -59,7 +80,7 @@ public class InscriptionController {
         response.addCookie(tokenCookie);
 
         
-        return "redirect:/?token=" + token; 
+        return "redirect:/"; 
     }
     
    

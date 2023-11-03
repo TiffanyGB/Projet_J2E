@@ -1,5 +1,6 @@
 package projetJEE.ProjetEE.Controllers;
 
+import java.io.IOException;
 import java.sql.Date;
 import java.util.Collections;
 import java.util.HashMap;
@@ -17,6 +18,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
@@ -63,11 +65,13 @@ public class VoyagesController {
 		return "admin/liste_voyages_admin";
 	}
     
+
     @PostMapping("/ajouter-voyage")
     public String ajouterVoyage(@ModelAttribute Voyage voyage) {
     	voyageRepository.save(voyage); 
     	return "redirect:/voyages";
 	}
+
     
     @PostMapping("/supprimer-voyage")
     public String supprimerVoyage(@RequestParam Long voyageId) {

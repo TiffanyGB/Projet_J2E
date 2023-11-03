@@ -1,21 +1,16 @@
 A faire site:
 
-
 Profil Administrateur:
+Ajout et modif categories, voyages
 Modification Catégories: nom, image
 Modification des voyages: -->Bug si on ne rechoisie pas la catégorie
 -->Mettre les images comme categorie
-Suppression
 
-Utilisateur: vérifier que l'adresse mail est unique sinon erreur
 Connexion: erreur login ou mdp
 Hacher mdp
 Vérifier les données des form 
- 
- Lorsqu'on annule, rajouter le nombres de places au voyage
- 
+  
 BONUS
-Supprimer son compte, donc supprime toutes les  reservations(client)
 Coups de coeur
 Modifier infos profil nom prenom mdp
-A coté de "déjà réservé" mettre bouton annulé
+A coté de "déjà réservé" mettre bouton annuler

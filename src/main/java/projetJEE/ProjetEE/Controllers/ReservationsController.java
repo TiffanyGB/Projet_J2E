@@ -85,16 +85,20 @@ public class ReservationsController {
     public String annulerVoyage(HttpServletRequest request, Model model, @RequestParam("reservationId") Long reservationId) {
 
         extractTokenInfo(request, model);
+        
+        /*Rajouter les places à la destination*/
         Reserver res = reserverRepository.findById(reservationId).orElse(null);
+        res.getVoyage().setNbPlaces(res.getNbPersonnes() + res.getVoyage().getNbPlaces());
+
+        /*Supprimer reservation*/
         reserverRepository.deleteById(reservationId);
         
-
+        /*Si admin*/
         Boolean role = (Boolean) model.getAttribute("role");
         if(role) {
-        	System.out.print("ok");
         	return "redirect:/reservation-Voyage/" +res.getVoyage().getVoyageId();
         }
-        System.out.print("olllk");
+        /*Client*/
     	return "redirect:/profil-Client";
     }
     
