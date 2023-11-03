@@ -9,7 +9,7 @@
 </head>
 <body>
 	<div th:replace="header :: header"></div>
-	<button class="retour"><a th:href="@{/}">Retour à la page d'accueil</a></button>
+	<a class="retour" th:href="@{/}">Retour à la page d'accueil</a>
     <h1>Liste des Voyages</h1>
     
     <a th:href="@{/reservations-liste}" style="color: black;">Réservations</a>
@@ -32,7 +32,7 @@
         </thead>
         <tbody>
             <tr th:each="voyage : ${voyages}" class="voyage-row">
-				<td><img th:src="@{/img/} + ${voyage.imageVoyage}" alt="Image du voyage" style="max-width: 50%; max-height: 100px;"></td>
+				<td><img th:src="@{/displayImage/{id}(id=${voyage.voyageId})}" style="width: 80%;"></td>
 				<td class="pays" th:text="${voyage.pays}"></td>
 		        <td class="ville" th:text="${voyage.ville}"></td>
 		        <td class="description" th:text="${voyage.description}"></td>
@@ -59,7 +59,7 @@
     </br>
     </br>
     
-	<form th:action="@{/ajouter-voyage}" method="post">
+	<form th:action="@{/ajouter-voyage}" method="post" enctype="multipart/form-data">
 	    <label for="ville">Ville :</label>
 	    <input type="text" id="ville" name="ville" required><br>
 	    
@@ -69,8 +69,8 @@
 	    <label for="prix_unitaire">Prix unitaire:</label>
 	    <input type="number" id="prix_unitaire" name="prix_unitaire" required><br>
 	    
-	    <label for="imageVoyage">Image du Voyage:</label>
-	    <input type="text" id="imageVoyage" name="imageVoyage" required><br>
+	     <label for="image">Image du Voyage:</label>
+	     <input id="image" th:name="image" type="file" required/>
 	    
 	    <label for="pays">Pays :</label>
 	    <input type="text" id="pays" name="pays" required><br>

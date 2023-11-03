@@ -19,7 +19,7 @@
 
     <div class="grid-container">
         <div class="grid-item" th:each="categorie : ${categories}">
-            <img th:src="@{/img/} + ${categorie.imageCategorie}" alt="Image du voyage" style="max-width: 100%; max-height: 100px;">
+            <img th:src="@{/displayImageCat/{id}(id=${categorie.idCategorie})}" style="width: 50%;">
             <p class="nomCategorie" th:text="${categorie.nomCategorie}"></p>
             <form th:action="@{'/categorie-voyages/' + ${categorie.idCategorie}}" method="get">
                 <input type="hidden" name="idCategorie" th:value="${categorie.idCategorie}" />
@@ -27,6 +27,14 @@
             </form>
         </div>
     </div>
+    
+    <h1 id="dest">Bienvenue chez Odyssée Voyage</h1>
+    
+    <p>Chez Odyssée Voyage, nous croyons que chaque voyage est une aventure en soi. Notre mission est de vous inspirer à explorer le monde, à vivre des expériences inoubliables et à créer des souvenirs qui dureront toute une vie. Nous comprenons l'importance du voyage en tant que source d'enrichissement personnel, de découverte culturelle et de moments précieux en famille et entre amis.</p>
 		
+	<p>Notre site de vente de voyages en ligne est conçu pour rendre vos rêves de voyage accessibles et inoubliables. Que vous souhaitiez explorer les ruelles pittoresques de l'Europe, vous détendre sur les plages de sable blanc des Caraïbes, ou vivre l'aventure dans des destinations exotiques, Odyssée Voyage est votre compagnon de confiance pour planifier et réserver votre prochaine aventure.</p>
+	
+	<p>Nous nous engageons à vous offrir une expérience de voyage sans tracas, du début à la fin. Notre équipe d'experts passionnés est là pour vous guider à travers un large éventail de destinations, d'hébergements et d'activités. Nous sommes fiers de vous offrir des voyages sur mesure qui répondent à vos goûts et à vos besoins uniques.</p>
+	
 	</body>
 </html>

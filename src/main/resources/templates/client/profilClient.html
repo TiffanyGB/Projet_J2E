@@ -48,7 +48,7 @@
         </thead>
         <tbody>
             <tr th:each="res : ${reservations}">
-				<td><img th:src="@{/img/} + ${res.voyage.imageVoyage}" alt="Image du voyage" style="max-width: 50%; max-height: 100px;"></td>
+				<td><img th:src="@{/displayImage/{id}(id=${res.voyage.voyageId})}" style="width: 50%;"></td>
 				<td class="pays" th:text="${res.voyage.pays}"></td>
 		        <td class="ville" th:text="${res.voyage.ville}"></td>
 		        <td class="nbPlaces" th:text="${res.nbPersonnes}"></td>

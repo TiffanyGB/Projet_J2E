@@ -1,28 +1,23 @@
 package projetJEE.ProjetEE.Controllers;
 
-import java.io.File;
-import java.io.IOException;
-import java.security.SecureRandom;
-import java.time.Instant;
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 
-import org.hibernate.sql.ast.tree.expression.Duration;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseCookie;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.multipart.MultipartFile;
 
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import projetJEE.ProjetEE.Models.Utilisateur;
 import projetJEE.ProjetEE.Repersitory.UtilisateurRepository;
@@ -35,13 +30,19 @@ public class ConnexionController {
     private UtilisateurRepository utilisateurRepository;
    
     @GetMapping("/connexion")
-    public String connexionGET() {
+    public String connexionGET(@RequestParam(name = "error", required = false) String error, Model model) {
+        if (error != null) {
+        	model.addAttribute("error", error);
+        }
 		return "connexion";
 	}
 
     
     @PostMapping("/connexion-verif")
-    public String connexionPost(@ModelAttribute Utilisateur user, HttpServletResponse response, Model model) {
+    public String connexionPost(@ModelAttribute Utilisateur user, 
+    		HttpServletResponse response, 
+    		Model model,
+    		HttpServletRequest request) {
     	List<Utilisateur> existe = utilisateurRepository.findByEmailAndMdp(user.getEmail(), user.getMdp());
     	
     	/*identifiants corrects*/
@@ -62,12 +63,12 @@ public class ConnexionController {
             tokenCookie.setMaxAge(3600);
             response.addCookie(tokenCookie);
             
-            return "redirect:/?token=" + token;
+            return "redirect:/";
     	}
     	/*Identifiants incorrects*/
+    	String error = "Email ou mot de passe incorrect.";
+    	return "redirect:/connexion?error=" + URLEncoder.encode(error, StandardCharsets.UTF_8);
     	
-    	return "redirect:/connexion";
-
     }
     
    

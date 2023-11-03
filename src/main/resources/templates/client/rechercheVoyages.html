@@ -11,7 +11,7 @@
 	
 	<div class="fond">
 		<form th:action="@{/resultats-recherche}" method="post" id="rechercher">
-	    	<input type="text" id="recherche" name="recherche" placeholder="Entrez une ville, un pays..." required><br>
+	    	<input type="text" id="recherche" name="recherche" placeholder="Entrez une ville, un pays..." required maxlength="70"><br>
 		    <button id="btn-loupe" type="submit"><img src="/img/loupe.png" id="loupe" /></button>
 		</form>
 	</div>

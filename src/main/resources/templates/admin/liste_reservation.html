@@ -9,7 +9,7 @@
 </head>
 <body>
 	<div th:replace="header :: header"></div>
-	<button class="retour"><a th:href="@{/}">Retour à la page d'accueil</a></button>
+	<a class="retour" th:href="@{/}">Retour à la page d'accueil</a>
     <h1>Voyages réservés </h1>
     <p>Total: <span th:text="${voyagesReserves.size}"></p>
     
@@ -27,7 +27,7 @@
         </thead>
         <tbody>
             <tr th:each="voyage : ${voyagesReserves}">
-				<td><img th:src="@{/img/} + ${voyage.imageVoyage}" alt="Image du voyage" style="max-width: 50%; max-height: 100px;"></td>
+				<td><img th:src="@{/displayImage/{id}(id=${voyage.voyageId})}" style="width: 50%;"></td>
 				<td class="pays" th:text="${voyage.pays}"></td>
 		        <td class="ville" th:text="${voyage.ville}"></td>
 		        <td class="nbPlaces" th:text="${voyage.nbPlaces}"></td>

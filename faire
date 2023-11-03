@@ -1,16 +1,12 @@
 A faire site:
 
-Profil Administrateur:
-Ajout et modif categories, voyages
-Modification Catégories: nom, image
-Modification des voyages: -->Bug si on ne rechoisie pas la catégorie
--->Mettre les images comme categorie
-
-Connexion: erreur login ou mdp
 Hacher mdp
-Vérifier les données des form 
-  
+Inscription numero de tel que des nombres et afficher message d'erreur si faux
+Date de départ et arrivée cohérente
+
 BONUS
 Coups de coeur
 Modifier infos profil nom prenom mdp
 A coté de "déjà réservé" mettre bouton annuler
+Obligé caracteres speciaux dans mdp
+Zoom sur les photos

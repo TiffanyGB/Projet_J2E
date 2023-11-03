@@ -8,7 +8,7 @@
 </head>
 <body>
 	<div th:replace="header :: header"></div>
-	<button class="retour"><a th:href="@{/}">Retour à la page d'accueil</a></button>
+	<a class="retour" th:href="@{/}">Retour à la page d'accueil</a>
 
     <h1>Inscription</h1>
     
@@ -18,19 +18,19 @@
     
 	<form th:action="@{/inscription-enregistrer}" method="post" >
 	    <label for="nom">Nom:</label>
-	    <input type="text" id="nom" name="nom" required>
+	    <input type="text" id="nom" name="nom" required maxlength="49" minlength="2">
 	    
 	    <label for="prenom">Prénom</label>
-	    <input type="text" name="prenom" id="prenom" >
+	    <input type="text" name="prenom" id="prenom" required maxlength="49" minlength="2">
 	    
 	    <label for="numeroTelephone">Numéro de téléphone</label>
-	    <input type="text" name="numeroTelephone" id="numeroTelephone" >
+	    <input type="text" name="numeroTelephone" id="numeroTelephone" required >
 	    
 	    <label for="email">Adresse mail</label>
-	    <input type="email" name="email" id="email" >
+	    <input type="email" name="email" id="email" required>
 
 	    <label for="mdp">Mot de passe</label>
-	    <input type="password" name="mdp" id="mdp" >
+	    <input type="password" name="mdp" id="mdp"required minlength="8" maxlength="49">
 	        
 	    <button type="submit">S'inscrire</button>
 	</form>

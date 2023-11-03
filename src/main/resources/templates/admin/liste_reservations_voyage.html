@@ -9,7 +9,7 @@
 </head>
 <body>
 	<div th:replace="header :: header"></div>
-	<button class="retour"><a th:href="@{/}">Retour à la page d'accueil</a></button>
+	<a class="retour" th:href="@{/}">Retour à la page d'accueil</a>
     <h1>Réservations du voyage:  <span th:text="${voyage.ville}"></span> </h1>
    	<p>Prix unitaire: <span th:text="${voyage.prix_unitaire}"> </p>
    	<p>Total: <span th:text="${reservations.size}"></p>

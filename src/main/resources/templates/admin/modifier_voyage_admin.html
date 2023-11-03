@@ -9,11 +9,11 @@
 </head>
 <body>
 	<div th:replace="header :: header"></div>
-	<button class="retour"><a th:href="@{/voyages}">Retour à la liste des voyages</a></button>
+	<a class="retour" th:href="@{/voyages}">Retour à la liste des voyages</a>
 
     <h1>Modification de&nbsp; <span th:text="${voyage.ville}"></span> </h1>
     
-        <form th:action="@{/modifier-voyage}" method="post">
+        <form th:action="@{/modifier-voyage}" method="post" enctype="multipart/form-data">
         <input type="hidden" name="voyageId" th:value="${voyage.voyageId}" />
         <label for="ville">Ville :</label>
         <input type="text" id="ville" name="ville" th:value="${voyage.ville}" required><br>
@@ -30,12 +30,13 @@
         <label for="prix_unitaire">Prix unitaire :</label>
         <input type="number" id="prix_unitaire" name="prix_unitaire" th:value="${voyage.prix_unitaire}" required><br>
 
-	    <label for="imageVoyage">Image du Voyage:</label>
-	    <input type="text" id="imageVoyage" name="imageVoyage" th:value="${voyage.imageVoyage}" required><br>
-	    
+	    <label for="image">Image du Voyage:</label>
+	    <img th:src="@{/displayImage/{id}(id=${voyage.voyageId})}" style="width: 100px;">
+	    <input id="image" th:name="image" type="file" />
+
 		<label for="idCategorie">Catégorie:</label>
 		<select id="idCategorie" name="idCategorie">
-		    <option th:value="${voyage.idCategorie}"><span th:text="${voyage.idCategorie.nomCategorie}"></span></option>
+		    <option th:value="${voyage.idCategorie.idCategorie}"><span th:text="${voyage.idCategorie.nomCategorie}"></span></option>
 		    <th:block th:each="categorie : ${categories}">
 		        <option th:value="${categorie.idCategorie}" th:text="${categorie.nomCategorie}"></option>
 		    </th:block>

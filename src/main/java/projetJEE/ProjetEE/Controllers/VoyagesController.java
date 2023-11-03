@@ -67,7 +67,15 @@ public class VoyagesController {
     
 
     @PostMapping("/ajouter-voyage")
-    public String ajouterVoyage(@ModelAttribute Voyage voyage) {
+    public String ajouterVoyage(@ModelAttribute Voyage voyage, @RequestParam("image") MultipartFile file) throws IOException {
+    		
+	    if (file != null && !file.isEmpty()) {
+	        // Compression de l'image
+	        byte[] bytes = file.getBytes();
+
+	        voyage.setImageVoyage(bytes);
+	    }
+    	
     	voyageRepository.save(voyage); 
     	return "redirect:/voyages";
 	}
@@ -96,7 +104,8 @@ public class VoyagesController {
     }
     
     @PostMapping("/modifier-voyage")
-    public String modifierVoyage(HttpServletRequest request,@ModelAttribute Voyage voyage, Model model) {
+    public String modifierVoyage(HttpServletRequest request,@ModelAttribute Voyage voyage, Model model,
+    		@RequestParam("image") MultipartFile file) throws IOException {
 	    extractTokenInfo(request, model);
 
 	    /*Mauvais profil, il faut etre admin*/
@@ -105,15 +114,19 @@ public class VoyagesController {
 	    }
 	    
         Voyage voyageExistant = voyageRepository.findById(voyage.getVoyageId()).orElse(null);
-
         if (voyageExistant != null) {
             voyageExistant.setVille(voyage.getVille());
             voyageExistant.setDescription(voyage.getDescription());
             voyageExistant.setPays(voyage.getPays());
             voyageExistant.setNbPlaces(voyage.getNbPlaces());
-            voyageExistant.setImageVoyage(voyage.getImageVoyage());
             voyageExistant.setIdCategorie(voyage.getIdCategorie());
             voyageExistant.setPrix_unitaire(voyage.getPrix_unitaire());
+    	    if (file != null && !file.isEmpty()) {
+    	        // Compression de l'image
+    	        byte[] bytes = file.getBytes();
+    	        voyageExistant.setImageVoyage(bytes);
+    	    }
+    	    
             voyageRepository.save(voyageExistant);
         }
         return "redirect:/voyages";

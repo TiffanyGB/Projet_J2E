@@ -23,9 +23,6 @@ public class Voyage {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "voyageId")
     private Long voyageId;
-    
-//    @Column(name="imageVoyage", unique=false, nullable = true)
-//    private String imageVoyage;
 	
     @Lob
     @Column(name = "imageVoyage", columnDefinition = "MEDIUMBLOB")
@@ -59,15 +56,6 @@ public class Voyage {
 	public void setVoyageId(Long id) {
 		this.voyageId = id;
 	}
-	
-//    public String getImageVoyage() {
-//		return imageVoyage;
-//	}
-//
-//	public void setImageVoyage(String imageVoyage) {
-//		this.imageVoyage = imageVoyage;
-//	}
-//	
 	
 	public byte[] getImageVoyage() {
 		return imageVoyage;

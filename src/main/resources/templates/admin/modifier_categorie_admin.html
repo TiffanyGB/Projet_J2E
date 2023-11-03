@@ -9,18 +9,19 @@
 </head>
 <body>
 	<div th:replace="header :: header"></div>
-	<button class="retour"><a th:href="@{/voyages}">Retour à la liste des catégories</a></button>
+	<a class="retour" th:href="@{/voyages}">Retour à la liste des catégories</a>
 
     <h1>Modification de: <span th:text = "${categorie.nomCategorie}"></span></h1>
     
-    <form th:action="@{/modifier-categorie}" method="post">
+    <form th:action="@{/modifier-categorie}" method="post" enctype="multipart/form-data">
         <input type="hidden" name="idCategorie" th:value="${categorie.idCategorie}" />
         
         <label for="nomCategorie">Nom :</label>
         <input type="text" id="nomCategorie" name="nomCategorie" th:value="${categorie.nomCategorie}" required><br>
-        
-       <!-- <label for="imageCategorie">Image de la catégorie :</label>
-	    <input type="file" name="imageCategorie" id="imageCategorie" class="form-control-file">-->
+       
+       	<label for="image">Image de la catégorie:</label>
+	    <img th:src="@{/displayImageCat/{id}(id=${categorie.idCategorie})}" style="width: 100px;">
+	    <input id="image" th:name="image" type="file" />
 
     	<button type="submit">Modifier Catégorie</button>
     </form>

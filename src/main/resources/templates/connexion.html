@@ -11,13 +11,15 @@
 	<button class="retour"><a th:href="@{/}">Retour à la page d'accueil</a></button>
 
     <h1>Connexion</h1>
+    
+    <p th:if="${error!= null}" th:text="${error}"></p>
 
 	<form th:action="@{/connexion-verif}" method="post">
 	    <label for="email">Adresse mail:</label>
-	    <input type="text" id="email" name="email" required>
+	    <input type="text" id="email" name="email" required maxlength="49">
 	    
 	    <label for="mdp">Mot de passe:</label>
-	    <input type="text" name="mdp" id="mdp">
+	    <input type="password" name="mdp" id="mdp"  required maxlength="49">
 	        
 	    <button type="submit">Connexion</button>
 	</form>

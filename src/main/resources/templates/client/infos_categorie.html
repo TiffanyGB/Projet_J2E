@@ -8,11 +8,12 @@
 </head>
 <body>
 	<div th:replace="header :: header"></div>
-	<button class="retour"><a th:href="@{/categories-client}">Retour à la liste des catégories</a></button>
+	<a class="retour" th:href="@{/categories-client}">Liste des catégories</a>
 	<h1 ><span th:text="${categorie.nomCategorie}"></h1>
 
-	<p th:unless="${token}">Connectez-vous pour réserver</p>
-    <table>
+	<p th:unless="${token}" >Connectez-vous pour réserver</p>
+	<p th:if="${voyages.size == 0}">Pas de voyages pour cette catégorie</p>
+    <table th:if="${voyages.size > 0}">
         <thead>
             <tr>
 				<th>Image</th>
@@ -27,7 +28,7 @@
         </thead>
         <tbody>
             <tr th:each="voyage : ${voyages}" class="voyage-row">
-				<td><img th:src="@{/img/} + ${voyage.imageVoyage}" alt="Image du voyage" style="max-width: 50%; max-height: 100px;"></td>
+				<td><img th:src="@{/displayImage/{id}(id=${voyage.voyageId})}" style="width: 50%;"></td>
 				<td class="pays" th:text="${voyage.pays}"></td>
 		        <td class="ville" th:text="${voyage.ville}"></td>
 		        <td class="description" th:text="${voyage.description}"></td>

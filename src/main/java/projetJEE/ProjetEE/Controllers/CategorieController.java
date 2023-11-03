@@ -65,23 +65,15 @@ public class CategorieController {
     @PostMapping("/ajouter-categorie")
     public String ajouterCategorie(@ModelAttribute Categorie categorie,
     		@RequestParam("nomCategorie") String nomCategorie, 
-    		@RequestParam("file") MultipartFile file) {
+    		@RequestParam("file") MultipartFile file) throws IOException {
     	
-        if (!file.isEmpty()) {
-            try {
-                String fileName = file.getOriginalFilename();
-            	System.out.println(fileName);
+	    if (file != null && !file.isEmpty()) {
+	        // Compression de l'image
+	        byte[] bytes = file.getBytes();
 
-                String uploadDir = "/home/cytech/Cours/Ing2/S1/J2E/ProjetEE/src/main/resources/static/img/";
-                File dest = new File(uploadDir + fileName);
-
-                file.transferTo(dest);
-                categorie.setImageCategorie(fileName);
-
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
+	        categorie.setImageCategorie(bytes);
+	    }
+	    
     	categorieRepository.save(categorie); 
 
     	return "redirect:/listeCategories";
@@ -109,7 +101,9 @@ public class CategorieController {
     }
     
     @PostMapping("/modifier-categorie")
-    public String modifierCategorie(HttpServletRequest request, Model model,@ModelAttribute Categorie categorie, @RequestParam("imageCategorie") MultipartFile imageCategorie) {
+    public String modifierCategorie(HttpServletRequest request, Model model,
+    		@ModelAttribute Categorie categorie,
+    		@RequestParam("image") MultipartFile file) throws IOException{
     	
         extractTokenInfo(request, model);
         
@@ -118,12 +112,15 @@ public class CategorieController {
 	        return "redirect:/";
 	    } 
         Categorie categorieExistant = categorieRepository.findById(categorie.getIdCategorie()).orElse(null);
-        System.out.println(categorie);
         if (categorieExistant != null) {
-//        	categorieExistant.setImageCategorie(categorie.getImageCategorie());
             categorieExistant.setNomCategorie(categorie.getNomCategorie());
+    	    if (file != null && !file.isEmpty()) {
+    	        // Compression de l'image
+    	        byte[] bytes = file.getBytes();
+    	        categorieExistant.setImageCategorie(bytes);
+    	    }
             categorieRepository.save(categorieExistant);
-            }
+        }
             
         return "redirect:/listeCategories";
     }   

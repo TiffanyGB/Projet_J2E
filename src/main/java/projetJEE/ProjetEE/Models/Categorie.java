@@ -8,6 +8,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.Lob;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 
@@ -23,18 +24,28 @@ public class Categorie {
     @Column(name="nomCategorie", unique=false, nullable = false)
     private String nomCategorie;
     
-    @Column(name="imageCategorie", unique=false, nullable = false)
-    private String imageCategorie;
+    @Lob
+    @Column(name="imageCategorie", columnDefinition = "MEDIUMBLOB")
+    private byte[] imageCategorie;
     
     @OneToMany(mappedBy = "idCategorie", cascade = CascadeType.ALL)
     private Set<Voyage> voyages;
 
-	public String getImageCategorie() {
+
+	public byte[] getImageCategorie() {
 		return imageCategorie;
 	}
 
-	public void setImageCategorie(String imageCategorie) {
+	public void setImageCategorie(byte[] imageCategorie) {
 		this.imageCategorie = imageCategorie;
+	}
+
+	public Set<Voyage> getVoyages() {
+		return voyages;
+	}
+
+	public void setVoyages(Set<Voyage> voyages) {
+		this.voyages = voyages;
 	}
 
 	public Long getIdCategorie() {
