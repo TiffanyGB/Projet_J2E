@@ -97,11 +97,4 @@ public class Reserver {
         this.dateFin = dateFin;
     }
 
-//    public String getStatutReservation() {
-//        return statutReservation;
-//    }
-//
-//    public void setStatutReservation(String statutReservation) {
-//        this.statutReservation = statutReservation;
-//    }
 }
