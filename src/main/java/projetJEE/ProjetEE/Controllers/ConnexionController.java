@@ -20,7 +20,7 @@ import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import projetJEE.ProjetEE.Models.Utilisateur;
-import projetJEE.ProjetEE.Repersitory.UtilisateurRepository;
+import projetJEE.ProjetEE.Repository.UtilisateurRepository;
 import org.springframework.security.crypto.bcrypt.BCrypt;
 
 

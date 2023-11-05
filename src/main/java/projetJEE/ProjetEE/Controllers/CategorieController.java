@@ -25,10 +25,10 @@ import projetJEE.ProjetEE.Models.Categorie;
 import projetJEE.ProjetEE.Models.Reserver;
 import projetJEE.ProjetEE.Models.Utilisateur;
 import projetJEE.ProjetEE.Models.Voyage;
-import projetJEE.ProjetEE.Repersitory.CategorieRepository;
-import projetJEE.ProjetEE.Repersitory.ReserverRepository;
-import projetJEE.ProjetEE.Repersitory.UtilisateurRepository;
-import projetJEE.ProjetEE.Repersitory.VoyageRepository;
+import projetJEE.ProjetEE.Repository.CategorieRepository;
+import projetJEE.ProjetEE.Repository.ReserverRepository;
+import projetJEE.ProjetEE.Repository.UtilisateurRepository;
+import projetJEE.ProjetEE.Repository.VoyageRepository;
 
 
 @Controller

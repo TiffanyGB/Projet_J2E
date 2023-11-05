@@ -6,7 +6,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import projetJEE.ProjetEE.Models.Utilisateur;
-import projetJEE.ProjetEE.Repersitory.UtilisateurRepository;
+import projetJEE.ProjetEE.Repository.UtilisateurRepository;
 
 import org.springframework.security.crypto.bcrypt.BCrypt;
 

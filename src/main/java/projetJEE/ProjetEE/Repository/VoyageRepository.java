@@ -1,4 +1,4 @@
-package projetJEE.ProjetEE.Repersitory;
+package projetJEE.ProjetEE.Repository;
 
 import java.util.List;
 

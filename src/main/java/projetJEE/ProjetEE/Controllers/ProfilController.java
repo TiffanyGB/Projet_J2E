@@ -19,8 +19,8 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import projetJEE.ProjetEE.Models.Reserver;
 import projetJEE.ProjetEE.Models.Utilisateur;
-import projetJEE.ProjetEE.Repersitory.ReserverRepository;
-import projetJEE.ProjetEE.Repersitory.UtilisateurRepository;
+import projetJEE.ProjetEE.Repository.ReserverRepository;
+import projetJEE.ProjetEE.Repository.UtilisateurRepository;
 
 @Controller
 public class ProfilController {

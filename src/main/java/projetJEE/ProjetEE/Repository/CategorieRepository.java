@@ -1,4 +1,4 @@
-package projetJEE.ProjetEE.Repersitory;
+package projetJEE.ProjetEE.Repository;
 
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;

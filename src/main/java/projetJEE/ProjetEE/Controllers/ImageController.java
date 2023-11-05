@@ -10,8 +10,8 @@ import org.springframework.web.bind.annotation.PathVariable;
 
 import projetJEE.ProjetEE.Models.Categorie;
 import projetJEE.ProjetEE.Models.Voyage;
-import projetJEE.ProjetEE.Repersitory.CategorieRepository;
-import projetJEE.ProjetEE.Repersitory.VoyageRepository;
+import projetJEE.ProjetEE.Repository.CategorieRepository;
+import projetJEE.ProjetEE.Repository.VoyageRepository;
 
 @Controller
 public class ImageController {

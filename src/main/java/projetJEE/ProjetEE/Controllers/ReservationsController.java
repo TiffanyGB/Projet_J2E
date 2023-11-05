@@ -20,8 +20,8 @@ import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import projetJEE.ProjetEE.Models.Reserver;
 import projetJEE.ProjetEE.Models.Voyage;
-import projetJEE.ProjetEE.Repersitory.ReserverRepository;
-import projetJEE.ProjetEE.Repersitory.VoyageRepository;
+import projetJEE.ProjetEE.Repository.ReserverRepository;
+import projetJEE.ProjetEE.Repository.VoyageRepository;
 
 @Controller
 public class ReservationsController {
