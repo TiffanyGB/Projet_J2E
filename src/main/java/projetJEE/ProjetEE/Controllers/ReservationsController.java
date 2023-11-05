@@ -1,5 +1,11 @@
 package projetJEE.ProjetEE.Controllers;
 
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.Map;
+import java.util.Set;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -29,6 +35,44 @@ public class ReservationsController {
 
 
     /****************ADMIN****************/
+    
+    /*Voir les voyages ayant des réservations*/
+    @GetMapping("reservations-liste")
+    public String listeReservations(HttpServletRequest request,Model model) {
+	    extractTokenInfo(request, model);
+
+	    /*Mauvais profil, il faut etre admin*/
+	    if ((model.getAttribute("role") == null) || !(boolean) model.getAttribute("role")) {
+	        return "redirect:/";
+	    }
+    	Iterable<Reserver> reservations = reserverRepository.findAll();
+    	
+    	/*Ajout des voyages qui ont au moins une réservation*/
+    	Set<Voyage> voyagesReserves = new HashSet<>();
+        for (Reserver reservation : reservations) {
+            voyagesReserves.add(reservation.getVoyage());
+        } 	
+        
+        /*Calcul du nombre de places réservés dans chaque voyage*/
+        Map<Long, Integer> liste = new HashMap<>();
+        Iterator<Voyage> it = voyagesReserves.iterator();
+        
+        while(it.hasNext()) {
+        	Long idCourant = it.next().getVoyageId();
+        	liste.put(idCourant, 0);
+        	Iterable<Reserver> reservationsVoyages = reserverRepository.findByVoyageVoyageId(idCourant);
+        	Iterator<Reserver> itR = reservationsVoyages.iterator();
+        	while(itR.hasNext()) {
+            	liste.put(idCourant, liste.get(idCourant) + itR.next().getNbPersonnes());
+        	}
+        }
+
+        model.addAttribute("nbReserves", liste);
+        model.addAttribute("voyagesReserves", voyagesReserves);
+        
+    	return "admin/liste_reservation";
+    }
+    
     
     /*Voir les réservations d'un voyage POST*/
     @PostMapping("/reservations-Voyage/{id}")

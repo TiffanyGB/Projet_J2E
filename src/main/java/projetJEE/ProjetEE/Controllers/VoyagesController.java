@@ -8,7 +8,6 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.time.LocalDate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -48,6 +47,8 @@ public class VoyagesController {
     private UtilisateurRepository utilisateurRepository;
 
     /****************ADMIN****************/
+    
+    /*L'admin a accès aux voyages et peut les manipuler à partir de cette page*/
     @GetMapping("/voyages")
     public String afficherListeVoyages(HttpServletRequest request, Model model) {
 	    extractTokenInfo(request, model);
@@ -96,9 +97,11 @@ public class VoyagesController {
 	        return "redirect:/";
 	    }
         Voyage voyage = voyageRepository.findById(voyageId).orElse(null);
+        
         Iterable<Categorie> categories = categorieRepository.findAll();
         model.addAttribute("categories", categories);
         model.addAttribute("voyage", voyage);
+        
         return "admin/modifier_voyage_admin";
     }
     
@@ -113,6 +116,7 @@ public class VoyagesController {
 	    }
 	    
         Voyage voyageExistant = voyageRepository.findById(voyage.getVoyageId()).orElse(null);
+        
         if (voyageExistant != null) {
             voyageExistant.setVille(voyage.getVille());
             voyageExistant.setDescription(voyage.getDescription());
@@ -131,41 +135,7 @@ public class VoyagesController {
         return "redirect:/voyages";
     }   
     
-    @GetMapping("reservations-liste")
-    public String listeReservations(HttpServletRequest request,Model model) {
-	    extractTokenInfo(request, model);
-
-	    /*Mauvais profil, il faut etre admin*/
-	    if ((model.getAttribute("role") == null) || !(boolean) model.getAttribute("role")) {
-	        return "redirect:/";
-	    }
-    	Iterable<Reserver> reservations = reserverRepository.findAll();
-    	
-    	/*Ajout des voyages qui ont au moins une réservation*/
-    	Set<Voyage> voyagesReserves = new HashSet<>();
-        for (Reserver reservation : reservations) {
-            voyagesReserves.add(reservation.getVoyage());
-        } 	
-        
-        /*Calcul du nombre de places réservés dans chaque voyage*/
-        Map<Long, Integer> liste = new HashMap<>();
-        Iterator<Voyage> it = voyagesReserves.iterator();
-        
-        while(it.hasNext()) {
-        	Long idCourant = it.next().getVoyageId();
-        	liste.put(idCourant, 0);
-        	Iterable<Reserver> reservationsVoyages = reserverRepository.findByVoyageVoyageId(idCourant);
-        	Iterator<Reserver> itR = reservationsVoyages.iterator();
-        	while(itR.hasNext()) {
-            	liste.put(idCourant, liste.get(idCourant) + itR.next().getNbPersonnes());
-        	}
-        }
-
-        model.addAttribute("nbReserves", liste);
-        model.addAttribute("voyagesReserves", voyagesReserves);
-        
-    	return "admin/liste_reservation";
-    }
+ 
     
     /****************CLIENT****************/
     @GetMapping("/voyages-client")
@@ -182,8 +152,8 @@ public class VoyagesController {
         Map<Long, Boolean> voyagesWithReservationStatus = new HashMap<>();
 
 	    if (!model.asMap().isEmpty()) {
+	    	
 		    /*Rechercher du client*/
-
 		    Iterable<Utilisateur> tmp = utilisateurRepository.findByEmail((String) model.getAttribute("email"));
 	    	Iterator<Utilisateur> iterator = tmp.iterator();
 		    Utilisateur user = iterator.next();
@@ -209,7 +179,7 @@ public class VoyagesController {
 		return "client/liste_voyages_client";
 	}
     
-    
+    /*Formulaire de saisie des informations de la réservation*/
     @PostMapping("/reservation/{voyageId}")
     public String ajouterPanier(HttpServletRequest request,  @PathVariable Long voyageId,Model model) {
     	
@@ -255,6 +225,7 @@ public class VoyagesController {
         return "client/form_reservation";
 	}
 
+    /*Compte-rendu de la réservation*/
     @PostMapping("/réserver-infos")
     public String reserverVoyage(@RequestParam("nbPersonnes") int nbPersonnes, 
             @RequestParam("dateDebut") Date dateDebut, 
@@ -338,6 +309,7 @@ public class VoyagesController {
     	Iterable<Voyage> voyagesVilles = voyageRepository.findByVilleContainingIgnoreCase(recherche);
         Set<Voyage> resultatsRecherche = new HashSet<>();
         
+        /*On met tout dans le meme objet*/
         voyagesPays.forEach(resultatsRecherche::add);
         voyagesVilles.forEach(resultatsRecherche::add);
         
