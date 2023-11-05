@@ -37,7 +37,7 @@ public class ReservationsController {
     /****************ADMIN****************/
     
     /*Voir les voyages ayant des réservations*/
-    @GetMapping("reservations-liste")
+    @GetMapping("/reservations-liste")
     public String listeReservations(HttpServletRequest request,Model model) {
 	    extractTokenInfo(request, model);
 
