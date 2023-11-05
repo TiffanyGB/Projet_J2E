@@ -4,46 +4,69 @@
     <meta charset="UTF-8">
     <title>Voyages</title>
     <link rel="stylesheet" type="text/css" th:href="@{/css/style.css}">
-    <link rel="stylesheet" type="text/css" th:href="@{/css/header.css}">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+
 
 </head>
 <body>
 	<div th:replace="header :: header"></div>
-	<a class="retour" th:href="@{/voyages}">Retour à la liste des voyages</a>
-
-    <h1>Modification de&nbsp; <span th:text="${voyage.ville}"></span> </h1>
-    
-        <form th:action="@{/modifier-voyage}" method="post" enctype="multipart/form-data">
-        <input type="hidden" name="voyageId" th:value="${voyage.voyageId}" />
-        <label for="ville">Ville :</label>
-        <input type="text" id="ville" name="ville" th:value="${voyage.ville}" required><br>
-        
-        <label for="pays">Pays:</label>
-        <input type="text" id="pays" name="pays" th:value="${voyage.pays}" required><br>
-
-        <label for="description">Description :</label>
-        <input type="text" id="description" name="description" th:value="${voyage.description}" required><br>
-        
-        <label for="nbPlaces">Nombre de places:</label>
-        <input type="text" id="nbPlaces" name="nbPlaces" th:value="${voyage.nbPlaces}" required><br>
-
-        <label for="prix_unitaire">Prix unitaire :</label>
-        <input type="number" id="prix_unitaire" name="prix_unitaire" th:value="${voyage.prix_unitaire}" required><br>
-
-	    <label for="image">Image du Voyage:</label>
-	    <img th:src="@{/displayImage/{id}(id=${voyage.voyageId})}" style="width: 100px;">
-	    <input id="image" th:name="image" type="file" />
-
-		<label for="idCategorie">Catégorie:</label>
-		<select id="idCategorie" name="idCategorie">
-		    <option th:value="${voyage.idCategorie.idCategorie}"><span th:text="${voyage.idCategorie.nomCategorie}"></span></option>
-		    <th:block th:each="categorie : ${categories}">
-		        <option th:value="${categorie.idCategorie}" th:text="${categorie.nomCategorie}"></option>
-		    </th:block>
-		</select>
-
-        <button type="submit">Modifier Voyage</button>
-    </form>
 	
+	<span class="badge text-bg-secondary px-3 py-3 mx-4 my-4"><a th:href="@{/voyages}" style="text-decoration: none;">Retour à la liste des voyages</a></span>
+
+    <div class="container mt-5">
+    <div class="card">
+        <div class="card-body">
+            <h1 class="card-title">Modification de <span th:text="${voyage.ville}"></span></h1>
+            <form th:action="@{/modifier-voyage}" method="post" enctype="multipart/form-data">
+                <input type="hidden" name="voyageId" th:value="${voyage.voyageId}" />
+                <div class="form-group">
+                    <label for="ville">Ville :</label>
+                    <input type="text" id="ville" name="ville" th:value="${voyage.ville}" class="form-control" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="pays">Pays:</label>
+                    <input type="text" id="pays" name="pays" th:value="${voyage.pays}" class="form-control" required>
+                </div>
+    
+                <div class="form-group">
+                    <label for="description">Description :</label>
+                    <input type="text" id="description" name="description" th:value="${voyage.description}" class="form-control" required>
+                </div>
+    
+                <div class="form-group">
+                    <label for="nbPlaces">Nombre de places:</label>
+                    <input type="text" id="nbPlaces" name="nbPlaces" th:value="${voyage.nbPlaces}" class="form-control" required>
+                </div>
+    
+                <div class="form-group">
+                    <label for="prix_unitaire">Prix unitaire :</label>
+                    <input type="number" id="prix_unitaire" name="prix_unitaire" th:value="${voyage.prix_unitaire}" class="form-control" required>
+                </div>
+    
+                <div class="form-group">
+                    <label for="image">Image du Voyage:</label>
+                    <img th:src="@{/displayImage/{id}(id=${voyage.voyageId})}" style="width: 100px;">
+                    <input id="image" th:name="image" type="file" class="form-control" />
+                </div>
+    
+                <div class="form-group">
+                    <label for="idCategorie">Catégorie:</label>
+                    <select id="idCategorie" name="idCategorie" class="form-control">
+                        <option th:value="${voyage.idCategorie.idCategorie}"><span th:text="${voyage.idCategorie.nomCategorie}"></span></option>
+                        <th:block th:each="categorie : ${categories}">
+                            <option th:value="${categorie.idCategorie}" th:text="${categorie.nomCategorie}"></option>
+                        </th:block>
+                    </select>
+                </div>
+    
+                <button type="submit" class="btn btn-primary my-4">Modifier Voyage</button>
+            </form>
+        </div>
+    </div>
+</div>
+
+	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
+
 	</body>
 </html>
