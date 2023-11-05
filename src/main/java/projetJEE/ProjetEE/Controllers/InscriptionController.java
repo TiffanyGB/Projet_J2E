@@ -28,12 +28,12 @@ public class InscriptionController {
 	
     @Autowired
     private UtilisateurRepository utilisateurRepository;
-
-    /****************ADMIN****************/
-   
+    
+    /*Redirige vers la page d'inscription*/
     @GetMapping("/inscription")
     public String inscriptionGET(Model model, @RequestParam(name = "error", required = false) String error) {
   
+    	/*Message d'erreur lors de l'inscription si une tentative a échoué*/
         if (error != null) {
         	model.addAttribute("error", error);
         }
@@ -59,13 +59,14 @@ public class InscriptionController {
     	}
     	user.setAdmin(false);
     	
-    	// Hacher le mot de passe avant de l'enregistrer
-        String motDePasse = user.getMdp(); // Mot de passe en texte clair
+    	/* Hachage du mot de passe avant de l'enregistrer*/
+        String motDePasse = user.getMdp(); 
         String motDePasseHache = BCrypt.hashpw(motDePasse, BCrypt.gensalt());
         user.setMdp(motDePasseHache);
     	
     	utilisateurRepository.save(user);
     	
+    	/*Création token*/
         String token = Jwts.builder()
                 .setSubject(user.getNom())
                 .claim("role", false)

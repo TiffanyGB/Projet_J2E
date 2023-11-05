@@ -2,14 +2,13 @@ package projetJEE.ProjetEE.Controllers;
 
 import java.io.IOException;
 import java.sql.Date;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-
+import java.time.LocalDate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -272,12 +271,27 @@ public class VoyagesController {
 	    
     	Voyage voyage = voyageRepository.findById(voyageId).orElse(null);
 
+    	/* Nombres de personnes superieurs aux nombres de places*/
     	if(voyage.getNbPlaces() < nbPersonnes) {
             request.getSession().setAttribute("error", "Le nombre de places souhaitées dépasse le nombre de places disponibles.");
             return "redirect:/reservation/" + voyageId;
     	}
+    	
+    	/* Dates non cohérentes*/
+    	long currentTimeMillis = System.currentTimeMillis();
+    	Date today = new Date(currentTimeMillis);
+    	
+    	System.out.print(today);
+    	
+    	if(dateDebut.before(today)) {
+            request.getSession().setAttribute("error", "La date de début du voyage ne doit pas être déjà passée.");
+            return "redirect:/reservation/" + voyageId;
+        }
+        if(dateFin.before(dateDebut)) {
+            request.getSession().setAttribute("error", "La date de fin du voyage doit être après la date de départ.");
+            return "redirect:/reservation/" + voyageId;
+        }
 	 
-
 	    Iterable<Utilisateur> tmp = utilisateurRepository.findByEmail((String) model.getAttribute("email"));
     	Iterator<Utilisateur> iterator = tmp.iterator();
 	    Utilisateur user = iterator.next();

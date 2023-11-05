@@ -4,7 +4,6 @@ import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.Iterator;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,6 +32,8 @@ public class ConnexionController {
    
     @GetMapping("/connexion")
     public String connexionGET(@RequestParam(name = "error", required = false) String error, Model model) {
+    	
+    	/*Si erreur de connexion présente renvoyer celle-ci à la vue*/
         if (error != null) {
         	model.addAttribute("error", error);
         }
@@ -57,8 +58,10 @@ public class ConnexionController {
     		 
     		 /*Mdp haché*/
     		 String motDePasseHacheEnBase = premierUtilisateur.getMdp();
+    		 /*Vérifier que le mdp correspond*/
     		 if (BCrypt.checkpw(user.getMdp(), motDePasseHacheEnBase)) {
     		 
+    		/*Création du token*/
             String token = Jwts.builder()
                     .setSubject(premierUtilisateur.getNom())
                     .claim("role", premierUtilisateur.getAdmin())

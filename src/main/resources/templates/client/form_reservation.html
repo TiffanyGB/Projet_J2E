@@ -11,7 +11,6 @@
 
     <div th:if="${error != null}" class="alert alert-danger mx-5 my-5" role="alert">
         <p th:text="${error}"></p>
-        <p th:if="${error != null}">Nombre de places restantes : <span th:text="${voyage.nbPlaces}"></span></p>
     </div>
 
     <div class="d-flex justify-content-center my-5">
@@ -27,7 +26,7 @@
             
                     <div class="form-group">
                         <label for="nbPersonnes">Nombre de personnes:</label>
-                        <input type="number" class="form-control" id="nbPersonnes" name="nbPersonnes" required>
+                        <input type="number" class="form-control" id="nbPersonnes" name="nbPersonnes" required min="1" th:max="${voyage.nbPlaces}">
                     </div>
             
                     <div class="form-group">

@@ -22,19 +22,21 @@ public class ImageController {
     @Autowired
     private CategorieRepository categorieRepository;
 
+    /*Pour afficher une image d'un voyage*/
 	@GetMapping("/displayImage/{id}")
 	public ResponseEntity<byte[]> displayImage(@PathVariable Long id) {
 	    java.util.Optional<Voyage> produit = voyageRepository.findById(id);
 	    
 	    if (produit.isPresent() && produit.get().getImageVoyage() != null) {
 	        return ResponseEntity.ok()
-	                .contentType(MediaType.IMAGE_JPEG) // Assurez-vous de définir le type de contenu approprié
+	                .contentType(MediaType.IMAGE_JPEG) 
 	                .body(produit.get().getImageVoyage());
 	    } else {
 	        return ResponseEntity.notFound().build();
 	    }
 	}
 
+    /*Pour afficher une image d'une catégorie*/
 	@GetMapping("/displayImageCat/{id}")
 	public ResponseEntity<byte[]> displayImageCat(@PathVariable Long id) {
 	    java.util.Optional<Categorie> produit = categorieRepository.findById(id);

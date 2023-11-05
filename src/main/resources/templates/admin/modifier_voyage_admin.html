@@ -21,27 +21,27 @@
                 <input type="hidden" name="voyageId" th:value="${voyage.voyageId}" />
                 <div class="form-group">
                     <label for="ville">Ville :</label>
-                    <input type="text" id="ville" name="ville" th:value="${voyage.ville}" class="form-control" required>
+                    <input type="text" id="ville" name="ville" th:value="${voyage.ville}" class="form-control" required  maxlength="49">
                 </div>
                 
                 <div class="form-group">
                     <label for="pays">Pays:</label>
-                    <input type="text" id="pays" name="pays" th:value="${voyage.pays}" class="form-control" required>
+                    <input type="text" id="pays" name="pays" th:value="${voyage.pays}" class="form-control" required  maxlength="49">
                 </div>
     
                 <div class="form-group">
                     <label for="description">Description :</label>
-                    <input type="text" id="description" name="description" th:value="${voyage.description}" class="form-control" required>
+                    <input type="text" id="description" name="description" th:value="${voyage.description}" class="form-control" required  maxlength="380">
                 </div>
     
                 <div class="form-group">
                     <label for="nbPlaces">Nombre de places:</label>
-                    <input type="text" id="nbPlaces" name="nbPlaces" th:value="${voyage.nbPlaces}" class="form-control" required>
+                    <input type="number" id="nbPlaces" name="nbPlaces" th:value="${voyage.nbPlaces}" class="form-control" required min="1" max="100000">
                 </div>
     
                 <div class="form-group">
                     <label for="prix_unitaire">Prix unitaire :</label>
-                    <input type="number" id="prix_unitaire" name="prix_unitaire" th:value="${voyage.prix_unitaire}" class="form-control" required>
+                    <input type="number" id="prix_unitaire" name="prix_unitaire" th:value="${voyage.prix_unitaire}" class="form-control" required min="1" max="1000000s">
                 </div>
     
                 <div class="form-group">

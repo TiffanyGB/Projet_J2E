@@ -24,17 +24,17 @@
             <form th:action="@{/ajouter-voyage}" method="post" enctype="multipart/form-data">
                 <div class="form-group">
                     <label for="ville">Ville :</label>
-                    <input type="text" id="ville" name="ville" class="form-control" required>
+                    <input type="text" id="ville" name="ville" class="form-control" required max="49">
                 </div>
                 
                 <div class="form-group">
                     <label for="description">Description:</label>
-                    <input type="text" id="description" name="description" class="form-control" required>
+                    <input type="text" id="description" name="description" class="form-control" required  maxlength="380">
                 </div>
                 
                 <div class="form-group">
                     <label for="prix_unitaire">Prix unitaire:</label>
-                    <input type="number" id="prix_unitaire" name="prix_unitaire" class="form-control" required>
+                    <input type="number" id="prix_unitaire" name="prix_unitaire" class="form-control" required min="1" max="10000">
                 </div>
                 
                 <div class="form-group">
@@ -44,12 +44,12 @@
                 
                 <div class="form-group">
                     <label for="pays">Pays :</label>
-                    <input type="text" id="pays" name="pays" class="form-control" required>
+                    <input type="text" id="pays" name="pays" class="form-control" required max="49s">
                 </div>
                 
                 <div class="form-group">
                     <label for="nbPlaces">Nombre de places:</label>
-                    <input type="number" id="nbPlaces" name="nbPlaces" class="form-control" required>
+                    <input type="number" id="nbPlaces" name="nbPlaces" class="form-control" required min="1" max="10000">
                 </div>
                 
                 <div class="form-group">

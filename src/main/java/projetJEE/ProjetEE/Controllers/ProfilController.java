@@ -1,15 +1,7 @@
 package projetJEE.ProjetEE.Controllers;
 
-import java.net.URLEncoder;
-import java.nio.charset.StandardCharsets;
-import java.sql.Date;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
-import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCrypt;
@@ -17,7 +9,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
@@ -26,14 +17,10 @@ import io.jsonwebtoken.Jwts;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import projetJEE.ProjetEE.Models.Categorie;
 import projetJEE.ProjetEE.Models.Reserver;
 import projetJEE.ProjetEE.Models.Utilisateur;
-import projetJEE.ProjetEE.Models.Voyage;
-import projetJEE.ProjetEE.Repersitory.CategorieRepository;
 import projetJEE.ProjetEE.Repersitory.ReserverRepository;
 import projetJEE.ProjetEE.Repersitory.UtilisateurRepository;
-import projetJEE.ProjetEE.Repersitory.VoyageRepository;
 
 @Controller
 public class ProfilController {
@@ -44,7 +31,7 @@ public class ProfilController {
     @Autowired
     private UtilisateurRepository utilisateurRepository;
     
-    /****************CLIENT****************/
+    /*Permet à un client connecté de voir ses infos et réservations*/
     @GetMapping("/profil-Client")
     public String profilCLient(HttpServletRequest request, 
     		@RequestParam(name = "id", required = false) Long id,
@@ -57,6 +44,7 @@ public class ProfilController {
 	        return "redirect:/";
 	    }
 	    Utilisateur user;
+	    
 	    /*Chercher les infos du client*/
 	    if(id == null) {
 		    Iterable<Utilisateur> tmp = utilisateurRepository.findByEmail((String) model.getAttribute("email"));
@@ -78,9 +66,11 @@ public class ProfilController {
     @PostMapping("/supprimer-compte")
     public String supprimerCompte(HttpServletRequest request,  Model model, HttpServletResponse response) {
 	    extractTokenInfo(request, model);
+	    
 	    Iterable<Utilisateur> tmp = utilisateurRepository.findByEmail((String) model.getAttribute("email"));
     	Iterator<Utilisateur> iterator = tmp.iterator();
 	    Utilisateur user = iterator.next();
+	    
 	    utilisateurRepository.delete(user);
 	    
         // Supprimez le cookie en définissant un cookie expiré
@@ -124,8 +114,8 @@ public class ProfilController {
 	    
 	    Utilisateur userExistant = utilisateurRepository.findById(userId).orElse(null);
 
+	    /*Modification des infos*/
         if (userExistant != null) {
-        	userExistant.setEmail(user.getEmail());   
             userExistant.setNom(user.getNom());
             userExistant.setPrenom(user.getPrenom());
             if(user.getMdp() != "") {

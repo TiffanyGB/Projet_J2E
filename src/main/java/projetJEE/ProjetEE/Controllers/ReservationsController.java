@@ -1,19 +1,9 @@
 package projetJEE.ProjetEE.Controllers;
 
-import java.sql.Date;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -22,13 +12,9 @@ import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
-import projetJEE.ProjetEE.Models.Categorie;
 import projetJEE.ProjetEE.Models.Reserver;
-import projetJEE.ProjetEE.Models.Utilisateur;
 import projetJEE.ProjetEE.Models.Voyage;
-import projetJEE.ProjetEE.Repersitory.CategorieRepository;
 import projetJEE.ProjetEE.Repersitory.ReserverRepository;
-import projetJEE.ProjetEE.Repersitory.UtilisateurRepository;
 import projetJEE.ProjetEE.Repersitory.VoyageRepository;
 
 @Controller
@@ -37,16 +23,14 @@ public class ReservationsController {
     @Autowired
     private VoyageRepository voyageRepository;
     
-    @Autowired
-    private CategorieRepository categorieRepository;
     
     @Autowired
     private ReserverRepository reserverRepository;
-    
-    @Autowired
-    private UtilisateurRepository utilisateurRepository;
+
 
     /****************ADMIN****************/
+    
+    /*Voir les réservations d'un voyage POST*/
     @PostMapping("/reservations-Voyage/{id}")
     public String afficherListeVoyages(@PathVariable Long id, HttpServletRequest request, Model model) {
 	    extractTokenInfo(request, model);
@@ -63,7 +47,7 @@ public class ReservationsController {
 	    model.addAttribute("voyage", voyage);
 	    return "admin/liste_reservations_voyage";
 	}
-    
+    /*Voir les réservations d'un voyage GET*/
     @GetMapping("/reservation-Voyage/{id}")
     public String afficherListeVoyages2(@PathVariable Long id, HttpServletRequest request, Model model) {
 	    extractTokenInfo(request, model);
@@ -81,6 +65,7 @@ public class ReservationsController {
 	    return "admin/liste_reservations_voyage";
 	}
     
+    /*Annuler une réservation*/
     @PostMapping("/annulation")
     public String annulerVoyage(HttpServletRequest request, Model model, @RequestParam("reservationId") Long reservationId) {
 

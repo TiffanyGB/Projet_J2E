@@ -2,7 +2,6 @@ package projetJEE.ProjetEE.Controllers;
 
 import java.io.File;
 import java.io.IOException;
-import java.security.SecureRandom;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -49,19 +48,21 @@ public class CategorieController {
 
     /****************ADMIN****************/
    
+    /*Permet de voir la liste des categories et formulaire d'ajout*/
     @GetMapping("/listeCategories")
     public String afficherCategories(HttpServletRequest request, Model model) {
-		((Model) model).addAttribute("categories", categorieRepository.findAll());
 		extractTokenInfo(request, model);
 		
 	    /*Mauvais profil, il faut etre admin*/
 	    if ((model.getAttribute("role") == null) || !(boolean) model.getAttribute("role")) {
 	        return "redirect:/";
 	    }
+		((Model) model).addAttribute("categories", categorieRepository.findAll());
+
 		return "admin/liste_catégories_admin";
 	}
 
-    
+
     @PostMapping("/ajouter-categorie")
     public String ajouterCategorie(@ModelAttribute Categorie categorie,
     		@RequestParam("nomCategorie") String nomCategorie, 
@@ -76,6 +77,7 @@ public class CategorieController {
 	    
     	categorieRepository.save(categorie); 
 
+        /*Retour à la liste des catégories*/
     	return "redirect:/listeCategories";
 	}
     
@@ -83,6 +85,8 @@ public class CategorieController {
     @PostMapping("/supprimer-categorie")
     public String supprimerVoyage(@RequestParam Long idCategorie) {
         categorieRepository.deleteById(idCategorie);
+        
+        /*Retour à la liste des catégories*/
         return "redirect:/listeCategories";
     }
     
@@ -111,14 +115,18 @@ public class CategorieController {
 	    if ((model.getAttribute("role") == null) || !(boolean) model.getAttribute("role")) {
 	        return "redirect:/";
 	    } 
+	    
+	    /*Recherche des infos de la categorie à modifier*/
         Categorie categorieExistant = categorieRepository.findById(categorie.getIdCategorie()).orElse(null);
         if (categorieExistant != null) {
+        	//Modifier le nom
             categorieExistant.setNomCategorie(categorie.getNomCategorie());
     	    if (file != null && !file.isEmpty()) {
     	        // Compression de l'image
     	        byte[] bytes = file.getBytes();
     	        categorieExistant.setImageCategorie(bytes);
     	    }
+    	    //Enregistrement
             categorieRepository.save(categorieExistant);
         }
             
@@ -126,6 +134,8 @@ public class CategorieController {
     }   
     
     /****************CLIENT****************/
+    
+    /*Liste des catégories pour le client*/
     @GetMapping("/categories-client")
     public String afficherCategorieClient(HttpServletRequest request,Model model) {
 		((Model) model).addAttribute("categories", categorieRepository.findAll());
@@ -139,6 +149,7 @@ public class CategorieController {
 		return "client/liste_categories_client";
 	}
     
+    /*Tous les voyages d'une catégorie choisie*/
     @GetMapping("/categorie-voyages/{id}")
     public String categorieDetails(HttpServletRequest request,@PathVariable Long id, Model model) {
 		extractTokenInfo(request, model);
@@ -147,9 +158,10 @@ public class CategorieController {
         List<Voyage> voyagesDeLaCategorie = voyageRepository.findByIdCategorie(categorie);
         Map<Long, Boolean> voyagesWithReservationStatus = new HashMap<>();
         
+        //S'il y a un token
 	    if (!model.asMap().isEmpty()) {
 	    	
-		    /*Rechercher du client*/
+		    /*Rechercher client*/
 		    Iterable<Utilisateur> tmp = utilisateurRepository.findByEmail((String) model.getAttribute("email"));
 	    	Iterator<Utilisateur> iterator = tmp.iterator();
 		    Utilisateur user = iterator.next();
@@ -175,6 +187,8 @@ public class CategorieController {
         return "client/infos_categorie";
     }
     
+    
+    /*Accuei*/
     @GetMapping("/")
     public String accueil(HttpServletRequest request, Model model) {
 		((Model) model).addAttribute("categories", categorieRepository.findAll());
@@ -211,20 +225,6 @@ public class CategorieController {
             }
             return "redirect:/";
         }
-    }
-    
-    
-    private static final String CHARACTERS = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
-    private static SecureRandom random = new SecureRandom();
-
-    public static String generateRandomString(int length) {
-        StringBuilder sb = new StringBuilder(length);
-        for (int i = 0; i < length; i++) {
-            int randomIndex = random.nextInt(CHARACTERS.length());
-            char randomChar = CHARACTERS.charAt(randomIndex);
-            sb.append(randomChar);
-        }
-        return sb.toString();
     }
     
     private void extractTokenInfo(HttpServletRequest request, Model model) {

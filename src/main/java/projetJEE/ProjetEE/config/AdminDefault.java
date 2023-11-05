@@ -9,7 +9,6 @@ import projetJEE.ProjetEE.Models.Utilisateur;
 import projetJEE.ProjetEE.Repersitory.UtilisateurRepository;
 
 import org.springframework.security.crypto.bcrypt.BCrypt;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import jakarta.annotation.PostConstruct;
 
@@ -19,6 +18,7 @@ public class AdminDefault {
     @Autowired
     private UtilisateurRepository utilisateurRepository;
 
+    /*Permet de créer un admin par défaut avec un mot de passe haché*/
     @PostConstruct
     public void createInitialUser() {
         // On vérifie que l'utilisateur existe
@@ -26,7 +26,7 @@ public class AdminDefault {
         List<Utilisateur> existe = new ArrayList<>();
         temp.forEach(existe::add);
         
-        // L'utilisateur n'existe pas
+        // L'utilisateur n'existe pas, alors on en crée un
         if (existe.size() == 0) {
             Utilisateur utilisateur = new Utilisateur();
             utilisateur.setNom("admin");
