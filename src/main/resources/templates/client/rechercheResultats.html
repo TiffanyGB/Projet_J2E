@@ -4,41 +4,44 @@
     <meta charset="UTF-8">
     <title>Voyages</title>
     <link rel="stylesheet" type="text/css" th:href="@{/css/style.css}">
-    <link rel="stylesheet" type="text/css" th:href="@{/css/header.css}">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+
 
 </head>
 <body>
 	<div th:replace="header :: header"></div>
-	<a class="retour" th:href="@{/}">Retour à la page d'accueil</a>
+	
+	<span class="badge text-bg-secondary px-3 py-3 mx-4 my-4"><a th:href="@{/}" style="text-decoration: none;">Retour à la page d'accueil</a></span>
+	
     <h1>Recherche</h1>
-    <p>Nombre de résultats trouvés: <span th:text="${resultats.size}"></p>
+    <div class="alert alert-dark mx-5 my-5" role="alert">Nombre de résultats trouvés: <span th:text="${resultats.size}"/></div>
     
     
     <th:block th:if="${resultats.size > 0}">
 		    <table>
-		        <thead>
-		            <tr>
-						<th>Image</th>
-						<th>Pays</th>
-		                <th>Ville</th>
-		                <th>Description</th>
-		                <th>Prix unitaire</th>
-		                <th>Catégorie</th>
-		                <th>Nombre places</th>
-		                <th>Action</th>
-		            </tr>
-		        </thead>
 		        <tbody>
 		            <tr th:each="res : ${resultats}" class="voyage-row">
-						<td><img th:src="@{/displayImage/{id}(id=${res.voyageId})}" style="width: 50%;"></td>			
-						<td class="pays" th:text="${res.pays}"></td>
-				        <td class="ville" th:text="${res.ville}"></td>
-				        <td class="description" th:text="${res.description}"></td>
-				        <td class="prix" th:text="${res.prix_unitaire}"></td>
-				        <td class="categorie" th:text="${res.idCategorie.nomCategorie}"></td>
-				        <td class="nbPlaces" th:text="${res.nbPlaces}"></td> 
-
-
+					
+						<td class="d-flex align-items-center">
+					
+	                		<img  class="mx-5" th:src="@{/displayImage/{id}(id=${res.voyageId})}" style="width: 300px; height: 200px;">
+	        
+				            <div class="d-flex flex-column ">
+				                <h2>
+				                    <span th:text="${res.pays}"></span>
+				                    - <span th:text="${res.ville}"></span>
+				                </h2>
+				                <p class="text-muted" th:text="${res.idCategorie.nomCategorie}"></p>
+				                <p th:text="${res.description}"></p>
+				            </div>
+	            		</td>
+	            		<td>
+	                		<p>Places restantes : <span th:text="${res.nbPlaces}"></span></p>
+	            		</td>
+	            		<td>
+	                		<p><span th:text="${res.prix_unitaire}"/> €</p>
+	            		</td>
+            		
 						<!-- ********Non connecté******** -->
 						<!--Plus de places-->
 						<td th:unless="${token}" th:if="${res.nbPlaces == 0}">
@@ -48,7 +51,7 @@
 						<!-- Réservation possible -->
 						<td th:unless="${token}" th:if="${res.nbPlaces > 0}">
 						    <form th:action="@{/connexion}" method="get">
-						        <button type="submit">Réserver </button>
+						        <button type="submit" class="btn btn-primary">Réserver </button>
 						    </form>
 						</td>-						
 									
@@ -56,14 +59,14 @@
 						
 						<!-- Plus de places-->	
 						<td th:if="${token !=null && res.nbPlaces == 0 && !voyagesWithReservationStatus[res.voyageId]}">
-						  	<p>Plus de places disponibles</p>     
+						  	<p class="badge text-bg-danger">Plus de places disponibles</p>     
 						</td>
 											
 						<!-- Peut réserver-->
 						<td th:if="${token !=null && res.nbPlaces > 0 && !voyagesWithReservationStatus[res.voyageId]}">
 				    		<form th:action="@{'/reservation/' + ${res.voyageId}}" method="post">
 			                    <input type="hidden" name="voyageId" th:value="${res.voyageId}" />
-			                    <button type="submit">Réserver</button>
+			                    <button type="submit" class="btn btn-primary">Réserver</button>
 			                </form>
 						</td>-							
 						<!-- Déjà une réservation-->
@@ -80,5 +83,7 @@
     </br>
     </br>
 	
+		<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
+
 	</body>
 </html>

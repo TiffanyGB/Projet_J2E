@@ -4,25 +4,38 @@
     <meta charset="UTF-8">
     <title>Voyages</title>
     <link rel="stylesheet" type="text/css" th:href="@{/css/style.css}">
-    <link rel="stylesheet" type="text/css" th:href="@{/css/header.css}">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+
 
 </head>
 <body>
 	
 	<div th:replace="header :: header"></div>
-	<a class="retour" th:href="@{/voyages-client}">Retour à la page d'accueil</a>
+	
+	<span class="badge text-bg-secondary px-3 py-3 mx-4 my-4"><a th:href="@{/}" style="text-decoration: none;">Retour à la liste de voyages</a></span>
 
 
-	<h1>Confirmation de la réservation pour&nbsp;  <span th:text="${voyage.ville}"></span></h1>
-	<p>Une confirmation de la réservation à été envoyée à l'adresse mail': <span th:text="${user.email}"></span></p>
-	<p>Informations du voyage: </p>
-	<p>Pays: <span th:text="${voyage.pays}"></p>
-	<p>Nb de personnes: <span th:text="${reservation.nbPersonnes}"></p>
-    <p>Date de départ: <span th:text="${reservation.dateDebut}"></p>
-    <p>Date de retour: <span th:text="${reservation.dateFin}"></p>
-    <p>Prix par personne: <span th:text="${voyage.prix_unitaire}"></span>
-    <p>Prix total: <span th:text="${reservation.getPrixTotal}"> €</p>
 
+	<div class="alert alert-success mx-5 my-5">
+    <h1 class="mb-3">Confirmation de la réservation pour&nbsp; <span th:text="${voyage.ville}"></span></h1>
+    
+    <p>Une confirmation de la réservation a été envoyée à l'adresse mail : <strong><span th:text="${user.email}"></span></strong></p>
+    
+    <p><strong>Informations du voyage :</strong></p>
+    <ul class="list-unstyled">
+        <li><strong>Pays :</strong> <span th:text="${voyage.pays}"></span></li>
+        <li><strong>Nb de personnes :</strong> <span th:text="${reservation.nbPersonnes}"></span></li>
+        <li><strong>Date de départ :</strong> <span th:text="${reservation.dateDebut}"></span></li>
+        <li><strong>Date de retour :</strong> <span th:text="${reservation.dateFin}"></span></li>
+        <li><strong>Prix par personne :</strong> <span th:text="${voyage.prix_unitaire}"></span></li>
+        <li><strong>Prix total :</strong> <span th:text="${reservation.getPrixTotal}"> €</span></li>
+    </ul>
+</div>
+
+
+
+
+	    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
 
 	
 

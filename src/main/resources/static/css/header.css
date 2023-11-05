@@ -26,16 +26,16 @@ nav ul li {
     margin-right: 6%;
 }
 
-nav ul li a {
+.t {
     text-decoration: none;
     color: #000;
 }
 
-nav ul li a:hover {
+.t:hover {
     text-decoration: underline;
 }
 
-nav ul li a:visited {
+.t:visited {
     color: #000;
 }
 
@@ -43,4 +43,3 @@ nav ul li a:visited {
     width: 10%;
     float: left;
 }
-
