@@ -42,7 +42,7 @@
 	                		<p><span th:text="${res.prix_unitaire}"/> €</p>
 	            		</td>
             		
-						<!-- ********Non connecté******** -->
+						<!-- Non connecté -->
 						<!--Plus de places-->
 						<td th:unless="${token}" th:if="${res.nbPlaces == 0}">
 						        <p>Plus de places disponibles</p>
@@ -55,7 +55,7 @@
 						    </form>
 						</td>-						
 									
-						<!-- *********Connecté **********-->		
+						<!-- Connecté -->		
 						
 						<!-- Plus de places-->	
 						<td th:if="${token !=null && res.nbPlaces == 0 && !voyagesWithReservationStatus[res.voyageId]}">
