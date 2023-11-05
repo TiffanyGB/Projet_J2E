@@ -50,8 +50,8 @@
 	                <img th:src="@{/displayImageCat/{id}(id=${categorie.idCategorie})}" style="height: 10rem;">
 	                <div class="card-body">
 	                    <h5 class="card-title" th:text="${categorie.nomCategorie}"></h5>
-	                    <form th:action="@{'/categorie-voyages/' + ${categorie.idCategorie}}" method="get">
-	                        <input type="hidden" name="idCategorie" th:value="${categorie.idCategorie}" />
+<!--	                    <form th:action="@{'/categorie-voyages/' + ${categorie.idCategorie}}" method="get">
+	                        <input type="hidden" name="idCategorie" th:value="${categorie.idCategorie}" />-->
 	                        <div class="d-grid gap-2">
 	                        
 	                        <div class="d-flex mx-4">
@@ -67,8 +67,8 @@
 	                        </div>
 
 	                        </div>
-	                    </form>
-	                </div>
+<!--	                    </form>
+-->	                </div>
 	            </div>
 	        </div>
 	    </div>

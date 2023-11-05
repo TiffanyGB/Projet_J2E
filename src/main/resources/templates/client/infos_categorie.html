@@ -51,7 +51,7 @@
                 <td th:if="${token != null  && voyage.nbPlaces > 0  && !voyagesWithReservationStatus[voyage.voyageId] && !role}">
                     <form th:action="@{'/reservation/' + ${voyage.voyageId}}" method="post">
                         <input type="hidden" name="voyageId" th:value="${voyage.voyageId}" />
-                        <button type="submit">Réserver</button>
+                        <button type="submit" class="btn btn-primary">Réserver</button>
                     </form>
                 </td>
                 <td th:if="${token != null  && voyage.nbPlaces == 0 && !voyagesWithReservationStatus[voyage.voyageId] && !role}">
@@ -75,11 +75,11 @@
                 <td th:if="${role}">
                     <form th:action="@{/modifier-voyage-redirection}" method="post">
                         <input type="hidden" name="voyageId" th:value="${voyage.voyageId}" />
-                        <button type="submit">Modifier</button>
+                        <button type="submit" class="btn btn-primary">Modifier</button>
                     </form>  
                     <form th:action="@{/supprimer-voyage}" method="post">
                         <input type="hidden" name="voyageId" th:value="${voyage.voyageId}" />
-                        <button type="submit">Supprimer</button>
+                        <button type="submit" class="btn btn-primary">Supprimer</button>
                     </form>            
                 </td>
             </td>

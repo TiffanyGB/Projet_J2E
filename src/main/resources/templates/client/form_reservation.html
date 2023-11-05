@@ -20,6 +20,7 @@
                 <p class="card-text">Informations du voyage:</p>
                 <p class="card-text">Pays: <span th:text="${voyage.pays}"></span></p>
                 <p class="card-text">Catégorie: <span th:text="${nomCategorie}"></span></p>
+                <p class="card-text">Places restantes: <span th:text="${voyage.nbPlaces}"></span></p>
                 
                 <form th:action="@{/réserver-infos}" method="post">
                     <input type="hidden" name="voyageId" th:value="${voyage.voyageId}" />
